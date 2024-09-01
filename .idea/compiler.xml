@@ -13,4 +13,9 @@
       <module name="PlantPal" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="PlantPal" options="" />
+    </option>
+  </component>
 </project>

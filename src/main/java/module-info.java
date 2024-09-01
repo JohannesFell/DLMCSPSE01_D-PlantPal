@@ -3,6 +3,8 @@ module com.plantpal.PlantPal {
     requires javafx.fxml;
     requires javafx.web;
 
+    requires de.jensd.fx.glyphs.fontawesome;
+
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires validatorfx;
