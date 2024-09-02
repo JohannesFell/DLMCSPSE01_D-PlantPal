@@ -1,5 +1,6 @@
 package com.plantpal.app;
 
+import com.plantpal.database.SQLiteDB;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +12,7 @@ import javafx.stage.StageStyle;
 import java.util.Objects;
 
 public class PlantPalApp extends Application {
-
+    
     private double x,y = 0;
 
     public static void main(String[] args) {
@@ -41,6 +42,9 @@ public class PlantPalApp extends Application {
 
             primaryStage.setScene(new Scene(root, 1200, 800));
             primaryStage.show();
+
+            // Öffne die Datenbank und erstelle die Tabellen
+            SQLiteDB.getConnection();
 
 
         } catch (Exception e) {
