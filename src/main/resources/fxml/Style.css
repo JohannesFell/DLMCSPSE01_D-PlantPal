@@ -104,3 +104,9 @@
 .search:focused{
     -fx-border-width:2px;
 }
+
+.notificationLabel{
+    -fx-background-color: #495D5E;
+    -fx-text-fill: #D2DBC8;
+    -fx-padding: 10px;
+}

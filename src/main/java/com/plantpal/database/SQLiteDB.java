@@ -97,7 +97,7 @@ public class SQLiteDB {
                 "FOREIGN KEY(plant_id) REFERENCES PlantProfile(plant_id)" +
                 ");";
 
-        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
+        try (Statement stmt = connection.createStatement()) {
             // Erstellen der Tabellen
             stmt.execute(plantProfileTable);
             stmt.execute(careTaskTable);
