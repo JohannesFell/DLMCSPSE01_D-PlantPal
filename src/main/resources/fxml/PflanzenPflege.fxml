@@ -11,70 +11,59 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0"
-            prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <styleClass>
-      <String fx:value="inner_Screen"/>
-      <String fx:value="shadow"/>
+      <String fx:value="inner_Screen" />
+      <String fx:value="shadow" />
    </styleClass>
    <AnchorPane prefHeight="733.0" prefWidth="242.0" styleClass="column_anchorpane" stylesheets="@Style.css">
-      <ComboBox fx:id="standort" layoutX="13.0" layoutY="14.0" prefHeight="32.0" prefWidth="218.0"
-                promptText="Wähle einen Standort" styleClass="sidebar_buttons" stylesheets="@Style.css"
-                visibleRowCount="50">
+      <ComboBox fx:id="standort" layoutX="13.0" layoutY="14.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle einen Standort" styleClass="sidebar_buttons" stylesheets="@Style.css" visibleRowCount="50">
          <cursor>
-            <Cursor fx:constant="HAND"/>
+            <Cursor fx:constant="HAND" />
          </cursor>
       </ComboBox>
-      <ListView fx:id="pflanzen" layoutX="13.0" layoutY="65.0" prefHeight="658.0" prefWidth="218.0"
-                styleClass="table" stylesheets="@Style.css"/>
-      <ScrollBar layoutX="217.0" layoutY="65.0" orientation="VERTICAL" prefHeight="658.0" prefWidth="14.0"
-                 styleClass="table" stylesheets="@Style.css"/>
+      <ListView fx:id="pflanzen" layoutX="13.0" layoutY="65.0" prefHeight="658.0" prefWidth="218.0" styleClass="table" stylesheets="@Style.css" />
+      <ScrollBar layoutX="217.0" layoutY="65.0" orientation="VERTICAL" prefHeight="658.0" prefWidth="14.0" styleClass="table" stylesheets="@Style.css" />
    </AnchorPane>
-   <AnchorPane layoutX="255.0" layoutY="96.0" prefHeight="200.0" prefWidth="731.0" styleClass="table"
-               stylesheets="@Style.css">
-      <TableView fx:id="current_tasks" layoutX="3.0" layoutY="4.0" prefHeight="193.0" prefWidth="722.0"
-                 styleClass="table" stylesheets="@Style.css">
+   <AnchorPane layoutX="255.0" layoutY="96.0" prefHeight="200.0" prefWidth="731.0" styleClass="table" stylesheets="@Style.css">
+      <TableView fx:id="current_tasks" layoutX="3.0" layoutY="4.0" prefHeight="193.0" prefWidth="722.0" styleClass="table" stylesheets="@Style.css">
          <columns>
-            <TableColumn prefWidth="84.0" text="Standort"/>
-            <TableColumn prefWidth="106.0" text="Intervall Gießen"/>
-            <TableColumn prefWidth="102.0" text="Intervall Düngen"/>
-            <TableColumn prefWidth="109.0" text="Nächstes Gießen"/>
-            <TableColumn minWidth="2.0" prefWidth="119.0" text="Nächstes Düngen"/>
-            <TableColumn minWidth="2.0" prefWidth="200.0" text="Aktionen"/>
+            <TableColumn prefWidth="113.0" text="Pflanze" />
+            <TableColumn prefWidth="81.0" text="Standort" />
+            <TableColumn prefWidth="98.0" text="Intervall Gießen" />
+            <TableColumn prefWidth="101.0" text="Intervall Düngen" />
+            <TableColumn minWidth="2.0" prefWidth="101.0" text="Nächstes Gießen" />
+            <TableColumn minWidth="2.0" prefWidth="105.0" text="Nächstes Düngen" />
+            <TableColumn minWidth="2.0" prefWidth="122.0" text="Aktionen" />
          </columns>
       </TableView>
    </AnchorPane>
-   <AnchorPane layoutX="255.0" layoutY="333.0" prefHeight="392.0" prefWidth="731.0" styleClass="table"
-               stylesheets="@Style.css">
-      <TableView fx:id="history" layoutX="5.0" layoutY="4.0" prefHeight="382.0" prefWidth="722.0" styleClass="table"
-                 stylesheets="@Style.css">
+   <AnchorPane layoutX="255.0" layoutY="333.0" prefHeight="392.0" prefWidth="731.0" styleClass="table" stylesheets="@Style.css">
+      <TableView fx:id="history" layoutX="5.0" layoutY="4.0" prefHeight="382.0" prefWidth="722.0" styleClass="table" stylesheets="@Style.css">
          <columns>
-            <TableColumn prefWidth="84.0" text="Standort"/>
-            <TableColumn prefWidth="106.0" text="Intervall Gießen"/>
-            <TableColumn prefWidth="102.0" text="Intervall Düngen"/>
-            <TableColumn prefWidth="101.0" text="Letztes Gießen"/>
-            <TableColumn minWidth="2.0" prefWidth="100.0" text="Letztes Düngen"/>
-            <TableColumn minWidth="2.0" prefWidth="227.0" text="Notizen"/>
+            <TableColumn prefWidth="84.0" text="Pflanze" />
+            <TableColumn prefWidth="106.0" text="Standort" />
+            <TableColumn prefWidth="102.0" text="Intervall Gießen" />
+            <TableColumn prefWidth="101.0" text="Intervall Düngen" />
+            <TableColumn minWidth="2.0" prefWidth="100.0" text="Letztes Gießen" />
+            <TableColumn minWidth="2.0" prefWidth="144.0" text="Letztes Düngen" />
+            <TableColumn minWidth="2.0" prefWidth="84.0" text="Notizen" />
          </columns>
       </TableView>
    </AnchorPane>
-   <Label layoutX="255.0" layoutY="66.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark"
-          stylesheets="@Style.css" text="Anstehende Pflegeaufgaben">
+   <Label layoutX="255.0" layoutY="66.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Anstehende Pflegeaufgaben">
       <font>
-         <Font name="Tahoma Bold" size="14.0"/>
+         <Font name="Tahoma Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="255.0" layoutY="306.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark"
-          stylesheets="@Style.css" text="Historie">
+   <Label layoutX="255.0" layoutY="306.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Historie">
       <font>
-         <Font name="Tahoma Bold" size="14.0"/>
+         <Font name="Tahoma Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="255.0" layoutY="14.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Pflanze und Standort"
-          underline="true">
+   <Label layoutX="255.0" layoutY="14.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Pflanze und Standort" underline="true">
       <font>
-         <Font name="System Bold" size="24.0"/>
+         <Font name="System Bold" size="24.0" />
       </font>
    </Label>
 </AnchorPane>
