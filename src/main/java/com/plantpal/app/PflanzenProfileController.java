@@ -58,6 +58,17 @@ public class PflanzenProfileController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // ComboBox für Gieß- und Düngeintervall mit Werten 1-31 initialisieren
+        ObservableList<Integer> intervalValues = FXCollections.observableArrayList();
+        for (int i = 1; i <= 31; i++) {
+            intervalValues.add(i);
+        }
+
+        // Werte in die ComboBoxen setzen
+        intervall_giessen.setItems(intervalValues);
+        intervall_duengen.setItems(intervalValues);
+
         plantData = FXCollections.observableArrayList();
         // FilteredList mit der ObservableList initialisieren
         filteredData = new FilteredList<>(plantData, p -> true);

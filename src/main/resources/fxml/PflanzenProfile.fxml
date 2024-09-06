@@ -118,12 +118,12 @@
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <ComboBox fx:id="intervall_giessen" layoutX="535.0" layoutY="574.0" prefHeight="25.0" prefWidth="209.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
+   <ComboBox fx:id="intervall_giessen" layoutX="535.0" layoutY="574.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
    </ComboBox>
-   <ComboBox fx:id="intervall_duengen" layoutX="535.0" layoutY="628.0" prefHeight="25.0" prefWidth="209.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
+   <ComboBox fx:id="intervall_duengen" layoutX="535.0" layoutY="628.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -207,4 +207,14 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
+   <Label layoutX="712.0" layoutY="580.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tage">
+      <font>
+         <Font name="Tahoma" size="14.0" />
+      </font>
+   </Label>
+   <Label layoutX="712.0" layoutY="635.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tage">
+      <font>
+         <Font name="Tahoma" size="14.0" />
+      </font>
+   </Label>
 </AnchorPane>
