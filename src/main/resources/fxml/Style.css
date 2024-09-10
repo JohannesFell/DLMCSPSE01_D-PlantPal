@@ -110,3 +110,7 @@
     -fx-text-fill: #D2DBC8;
     -fx-padding: 10px;
 }
+
+.noteTextArea .content{
+    -fx-background-color: #D2DBC8;
+}

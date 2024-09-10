@@ -171,7 +171,7 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Button fx:id="btn_update" layoutX="774.0" layoutY="683.0" mnemonicParsing="false" onAction="#updatePlant" stylesheets="@Style.css" text="Aktualisieren">
+   <Button fx:id="btn_update" layoutX="774.0" layoutY="683.0" mnemonicParsing="false" onAction="#updatePlantProfile" stylesheets="@Style.css" text="Aktualisieren">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>

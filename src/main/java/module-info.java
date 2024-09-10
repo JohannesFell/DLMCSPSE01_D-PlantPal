@@ -12,6 +12,7 @@ module com.plantpal.PlantPal {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
     opens com.plantpal.app to javafx.fxml;
     exports com.plantpal.app;

@@ -53,6 +53,11 @@ public class PflanzenProfileController implements Initializable {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private FilteredList<PflanzenProfile_Model> filteredData;
 
+    private static final int TASK_ID_NAME_CHANGE = 1001;
+    private static final int TASK_ID_LOCATION_CHANGE = 1002;
+    private static final int TASK_ID_WATERING_INTERVAL_CHANGE = 1003;
+    private static final int TASK_ID_FERTILIZING_INTERVAL_CHANGE = 1004;
+
     /**
      * Initialisiert den Controller.
      */
@@ -151,11 +156,14 @@ public class PflanzenProfileController implements Initializable {
             // Bildpfad vorerst leer
             pstmt.setString(9, "");
 
-            pstmt.executeUpdate();
-            loadPlantData();
-            pflanzenProfil_tableView.refresh();
-            clearFormFields();  // Formular nach dem Hinzufügen leeren
-            showNotification("Pflanze erfolgreich hinzugefügt!");
+            // Pflichtfelder prüfen
+            if (checkMandatoryFields()) {
+                pstmt.executeUpdate();
+                loadPlantData();
+                pflanzenProfil_tableView.refresh();
+                clearFormFields();  // Formular nach dem Hinzufügen leeren
+                showNotification("Pflanze erfolgreich hinzugefügt!");
+            }
 
         } catch (SQLException e) {
             System.out.println("Fehler beim Hinzufügen der Pflanze.");
@@ -193,34 +201,73 @@ public class PflanzenProfileController implements Initializable {
 
     /**
      * Aktualisiert das ausgewählte Pflanzenprofil in der Datenbank.
+     * Änderungen im Namen, Standort oder bei den Gieß-/Düngeintervalle werden in die Historie fortgeschrieben.
      */
     @FXML
-    private void updatePlant() {
+    private void updatePlantProfile() {
         // Hole die ausgewählte Pflanze aus der TableView
         PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
-        // Prüfe, ob eine Pflanze ausgewählt wurde
-        if (selectedPlant != null) {
-            String sql = "UPDATE PlantProfile SET plant_name = ?, botanical_plant_name = ?, purchase_date = ?, " +
-                    "location = ?, watering_interval = ?, fertilizing_interval = ? WHERE plant_id = ?";
-            try (Connection conn = SQLiteDB.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                // Setze die aktualisierten Werte in die SQL-Abfrage
-                pstmt.setString(1, name.getText());
-                pstmt.setString(2, botanical_name.getText());
-                pstmt.setDate(3, java.sql.Date.valueOf(LocalDate.parse(kaufdatum.getText(), DATE_FORMATTER)));
-                pstmt.setString(4, standort.getText());
-                pstmt.setInt(5, getComboBoxValue(intervall_giessen));
-                pstmt.setInt(6, getComboBoxValue(intervall_duengen));
-                pstmt.setInt(7, selectedPlant.getPlant_id());
 
-                // Führe das Update aus
-                pstmt.executeUpdate();
-                loadPlantData();
-                pflanzenProfil_tableView.refresh();
-                clearFormFields();  // Formular nach dem Update leeren
-                showNotification("Pflanze erfolgreich aktualisiert!");
+        if (selectedPlant != null) {
+            String sql = "SELECT plant_name, location, watering_interval, fertilizing_interval FROM PlantProfile WHERE plant_id = ?";
+            try (Connection conn = SQLiteDB.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                // Aktuelle Werte aus der Datenbank laden
+                stmt.setInt(1, selectedPlant.getPlant_id());
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    String currentName = rs.getString("plant_name");
+                    String currentLocation = rs.getString("location");
+                    int currentWateringInterval = rs.getInt("watering_interval");
+                    int currentFertilizingInterval = rs.getInt("fertilizing_interval");
+
+                    // Beginne die Transaktion
+                    conn.setAutoCommit(false);
+
+                    // Überprüfe und speichere die Änderungen in der Historie
+                    if (!currentName.equals(name.getText())) {
+                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_NAME_CHANGE, "Name geändert", currentName, name.getText(), LocalDate.now());
+                    }
+
+                    if (!currentLocation.equals(standort.getText())) {
+                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_LOCATION_CHANGE, "Standort geändert", currentLocation, standort.getText(), LocalDate.now());
+                    }
+
+                    if (currentWateringInterval != getComboBoxValue(intervall_giessen)) {
+                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_WATERING_INTERVAL_CHANGE, "Gießintervall geändert", String.valueOf(currentWateringInterval), String.valueOf(getComboBoxValue(intervall_giessen)), LocalDate.now());
+                    }
+
+                    if (currentFertilizingInterval != getComboBoxValue(intervall_duengen)) {
+                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_FERTILIZING_INTERVAL_CHANGE, "Düngungsintervall geändert", String.valueOf(currentFertilizingInterval), String.valueOf(getComboBoxValue(intervall_duengen)), LocalDate.now());
+                    }
+
+                    // Führe das Update des Profils aus
+                    String updateSql = "UPDATE PlantProfile SET plant_name = ?, botanical_plant_name = ?, purchase_date = ?, " +
+                            "location = ?, watering_interval = ?, fertilizing_interval = ? WHERE plant_id = ?";
+                    try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                        updateStmt.setString(1, name.getText());
+                        updateStmt.setString(2, botanical_name.getText());
+                        updateStmt.setDate(3, java.sql.Date.valueOf(LocalDate.parse(kaufdatum.getText(), DATE_FORMATTER)));
+                        updateStmt.setString(4, standort.getText());
+                        updateStmt.setInt(5, getComboBoxValue(intervall_giessen));
+                        updateStmt.setInt(6, getComboBoxValue(intervall_duengen));
+                        updateStmt.setInt(7, selectedPlant.getPlant_id());
+                        updateStmt.executeUpdate();
+                    }
+
+                    // Commit der Transaktion
+                    conn.commit();
+
+                    // Tabelle aktualisieren
+                    loadPlantData();
+                    pflanzenProfil_tableView.refresh();
+                    clearFormFields();  // Formular nach dem Update leeren
+                    showNotification("Pflanze erfolgreich aktualisiert!");
+                }
+
             } catch (SQLException e) {
-                System.out.println("Fehler beim Aktualisieren der Pflanze.");
                 e.printStackTrace();
             }
         }
@@ -283,8 +330,6 @@ public class PflanzenProfileController implements Initializable {
         last_duengen.setText(plant.getLast_fertilized() != null ? plant.getLast_fertilized().format(DATE_FORMATTER) : "");
     }
 
-
-
     /**
      * Einrichten der TableView-Spalten.
      */
@@ -298,25 +343,27 @@ public class PflanzenProfileController implements Initializable {
         profile_last_giessen_col.setCellValueFactory(new PropertyValueFactory<>("last_watered"));
         profile_last_duengen_col.setCellValueFactory(new PropertyValueFactory<>("last_fertilized"));
 
+        addSuffixToColumn(profile_int_giessen_col, profile_int_duengen_col);
+
         // Wendet die Datumsformatierung auf die Spalten an
-        applyDateFormatting(DATE_FORMATTER, profile_kaufdatum, profile_last_giessen_col, profile_last_duengen_col);
+        applyDateFormatting(profile_kaufdatum, profile_last_giessen_col, profile_last_duengen_col);
     }
 
     /**
      * Wendet die Datumsformatierung auf die gegebenen Spalten an.
      */
     @SafeVarargs
-    private void applyDateFormatting(DateTimeFormatter formatter, TableColumn<PflanzenProfile_Model, LocalDate>... columns) {
+    private void applyDateFormatting(TableColumn<PflanzenProfile_Model, LocalDate>... columns) {
         for (TableColumn<PflanzenProfile_Model, LocalDate> column : columns) {
             column.setCellFactory(col -> new TextFieldTableCell<>(new StringConverter<>() {
                 @Override
                 public String toString(LocalDate date) {
-                    return date != null ? date.format(formatter) : "";
+                    return date != null ? date.format(PflanzenProfileController.DATE_FORMATTER) : "";
                 }
 
                 @Override
                 public LocalDate fromString(String string) {
-                    return string != null && !string.isEmpty() ? LocalDate.parse(string, formatter) : null;
+                    return string != null && !string.isEmpty() ? LocalDate.parse(string, PflanzenProfileController.DATE_FORMATTER) : null;
                 }
             }));
         }
@@ -351,5 +398,70 @@ public class PflanzenProfileController implements Initializable {
             slideOut.play();
         });
         slideIn.play();
+    }
+
+    private boolean checkMandatoryFields() {
+        // Prüfe, ob das Gieß-Intervall ausgewählt wurde
+        if (intervall_giessen.getValue() == null || intervall_giessen.getValue().toString().isEmpty()) {
+            showNotification("Bitte ein Gieß-Intervall auswählen.");
+            return false;
+        }
+
+        // Prüfe, ob das Düng-Intervall ausgewählt wurde
+        if (intervall_duengen.getValue() == null || intervall_duengen.getValue().toString().isEmpty()) {
+            showNotification("Bitte ein Düng-Intervall auswählen.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Methode zur Anpassung der Anzeige für Intervalle (z.B. Gießen, Düngen)
+    @SafeVarargs
+    public final void addSuffixToColumn(TableColumn<PflanzenProfile_Model, Integer>... columns) {
+        for (TableColumn<PflanzenProfile_Model, Integer> column : columns) {
+            column.setCellFactory(col -> new TableCell<>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);  // Wenn kein Wert vorhanden ist
+                    } else {
+                        setText(item + " Tage");  // Füge "Tage" Suffix hinzu
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Fügt einen Eintrag in die CareTaskHistory mit einer Notiz hinzu, die den alten und neuen Wert enthält.
+     *
+     * @param conn            Die Datenbankverbindung.
+     * @param plantId         Die ID der Pflanze.
+     * @param taskId          Die ID der Aufgabe (z.B. TASK_ID_NAME_CHANGE).
+     * @param action          Der Typ der Aktion (z.B. "Name geändert").
+     * @param oldValue        Der alte Wert.
+     * @param newValue        Der neue Wert.
+     * @param completionDate  Das Datum der Änderung.
+     * @throws SQLException   Wenn ein Fehler bei der Datenbankoperation auftritt.
+     */
+    private void insertIntoHistoryWithNote(Connection conn, int plantId, int taskId, String action, String oldValue, String newValue, LocalDate completionDate) throws SQLException {
+        if (oldValue.equals(newValue)) {
+            return;  // Wenn keine Änderung vorliegt, wird nichts in die Historie geschrieben
+        }
+
+        // Erstelle die Notiz mit dem alten und neuen Wert
+        String note = "Alter Wert: " + oldValue + "|| Neuer Wert: " + newValue;
+
+        String sql = "INSERT INTO CareTaskHistory (plant_id, task_id, task_type, completion_date, note) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, plantId);
+            stmt.setInt(2, taskId);
+            stmt.setString(3, action);
+            stmt.setDate(4, java.sql.Date.valueOf(completionDate));
+            stmt.setString(5, note);
+            stmt.executeUpdate();
+        }
     }
 }
