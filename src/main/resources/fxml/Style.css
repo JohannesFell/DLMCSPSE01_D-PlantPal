@@ -114,3 +114,13 @@
 .noteTextArea .content{
     -fx-background-color: #D2DBC8;
 }
+
+.settings_pane {
+    -fx-background-color: #495D5E;
+    -fx-text-fill: #D2DBC8;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #D2DBC8;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}

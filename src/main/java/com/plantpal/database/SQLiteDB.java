@@ -1,9 +1,6 @@
 package com.plantpal.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.logging.Logger;
 
 public class SQLiteDB {
@@ -97,6 +94,21 @@ public class SQLiteDB {
                 "FOREIGN KEY(plant_id) REFERENCES PlantProfile(plant_id)" +
                 ");";
 
+        String settingsTable = "CREATE TABLE IF NOT EXISTS Settings (" +
+                "settings_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "username TEXT NOT NULL," +
+                "email_address TEXT NOT NULL DEFAULT ''," +                         // E-Mail-Adresse für den Versand von Benachrichtigungen
+                "smtp_host TEXT NOT NULL DEFAULT 'smtp.gmail.com'," +               // Gmail-Host vorbelegt
+                "smtp_port INTEGER NOT NULL DEFAULT 587," +                         // Standard TLS-Port für Gmail
+                "smtp_username TEXT NOT NULL DEFAULT ''," +                         // SMTP-Benutzername (meist die gleiche E-Mail)
+                "smtp_password TEXT NOT NULL DEFAULT ''," +                         // Passwort (verschlüsselt speichern)
+                "use_tls BOOLEAN NOT NULL DEFAULT 1," +                             // TLS für Gmail immer aktiv
+                "days_before_reminder INTEGER NOT NULL DEFAULT 1," +                // Standarderinnerung 1 Tag vorher
+                "app_notification BOOLEAN NOT NULL DEFAULT 0," +                    // Standardmäßig keine App-Benachrichtigung
+                "email_notification BOOLEAN NOT NULL DEFAULT 0," +                  // Standardmäßig keine E-Mail-Benachrichtigung
+                "notification_email TEXT NOT NULL DEFAULT ''" +                    // Standard-Notification-E-Mail
+                ");";
+
         try (Statement stmt = connection.createStatement()) {
             // Erstellen der Tabellen
             stmt.execute(plantProfileTable);
@@ -105,9 +117,38 @@ public class SQLiteDB {
             stmt.execute(reminderTable);
             stmt.execute(knowledgeBaseTable);
             stmt.execute(photoLogTable);
+            stmt.execute(settingsTable);
             System.out.println("All tables have been created successfully.");
+            createDefaultEntriesSettings(stmt);  // Übergebe das bereits existierende Statement
+            System.out.println("All entries have been inserted successfully.");
         } catch (Exception e) {
             System.out.println("Failed to create tables.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void createDefaultEntriesSettings(Statement stmt) {
+        // Verwende das übergebene Statement anstatt eine neue Verbindung zu öffnen
+        try {
+            // Überprüfen, ob bereits ein Eintrag in der Settings-Tabelle vorhanden ist (basierend auf der settings_id)
+            String checkIfExistsSql = "SELECT settings_id FROM Settings WHERE settings_id = 1";
+            ResultSet rs = stmt.executeQuery(checkIfExistsSql);
+
+            if (!rs.next()) {
+                // Wenn noch kein Eintrag vorhanden ist, füge den Standarddatensatz ein
+                String insertDefaultSettings = "INSERT INTO Settings (" +
+                        "username, email_address, smtp_username, smtp_password, smtp_host, smtp_port, " +
+                        "use_tls, app_notification, email_notification" +
+                        ") VALUES (" +
+                        "'Pflanzenfreund', '', '', '', 'smtp.gmail.com', 587, 1, 0, 0" +
+                        ");";
+
+                stmt.executeUpdate(insertDefaultSettings);
+                System.out.println("Standarddatensatz in Settings eingefügt.");
+            } else {
+                System.out.println("Eintrag in Settings ist bereits vorhanden. Kein Einfügen erforderlich.");
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
