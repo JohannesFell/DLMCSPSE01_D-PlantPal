@@ -10,38 +10,34 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" styleClass="root_mainscreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.NotizenEditorController">
-   <TextArea fx:id="noteTextArea" layoutX="16.0" layoutY="52.0" prefHeight="302.0" prefWidth="569.0"
-             styleClass="noteTextArea" stylesheets="@Style.css">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root_mainscreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.NotizenEditorController">
+   <TextArea fx:id="noteTextArea" layoutX="16.0" layoutY="52.0" prefHeight="302.0" prefWidth="569.0" styleClass="noteTextArea" stylesheets="@Style.css">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
       </font>
    </TextArea>
-   <Button fx:id="saveButton" layoutX="259.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveNote"
-           stylesheets="@Style.css" text="Speichern">
+   <Button fx:id="saveButton" layoutX="259.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveNote" stylesheets="@Style.css" text="Speichern">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
       </font>
       <styleClass>
-         <String fx:value="action_buttons"/>
-         <String fx:value="action_buttons"/>
+         <String fx:value="action_buttons" />
+         <String fx:value="action_buttons" />
       </styleClass>
       <cursor>
-         <Cursor fx:constant="HAND"/>
+         <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
    <Label fx:id="exit" layoutX="561.0" layoutY="14.0" prefHeight="25.0" prefWidth="25.0">
       <graphic>
          <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/close.png"/>
+            <Image url="@../images/close.png" />
          </ImageView>
       </graphic>
    </Label>
    <Label layoutX="16.0" layoutY="13.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Notizen">
       <font>
-         <Font size="18.0"/>
+         <Font size="18.0" />
       </font>
    </Label>
 </AnchorPane>

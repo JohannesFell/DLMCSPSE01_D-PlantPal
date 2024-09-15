@@ -16,4 +16,8 @@ module com.plantpal.PlantPal {
 
     opens com.plantpal.app to javafx.fxml;
     exports com.plantpal.app;
+    exports com.plantpal.model;
+    opens com.plantpal.model to javafx.fxml;
+    exports com.plantpal.logic;
+    opens com.plantpal.logic to javafx.fxml;
 }

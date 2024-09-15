@@ -1,4 +1,4 @@
-package com.plantpal.app;
+package com.plantpal.model;
 
 public class Einstellungen_Model {
 

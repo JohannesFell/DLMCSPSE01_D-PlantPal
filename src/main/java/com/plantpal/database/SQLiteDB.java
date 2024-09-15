@@ -3,6 +3,17 @@ package com.plantpal.database;
 import java.sql.*;
 import java.util.logging.Logger;
 
+/**
+ * Die Klasse {@code SQLiteDB} bietet eine zentrale Verwaltung für den Datenbankzugriff auf eine SQLite-Datenbank.
+ * Sie stellt eine Methode zur Verfügung, um eine Verbindung zur SQLite-Datenbank herzustellen und zu verwalten.
+ *
+ * Diese Klasse implementiert das Singleton-Designmuster, um sicherzustellen, dass immer nur eine Instanz der
+ * Datenbankverbindung existiert. Sie wird in der gesamten Anwendung genutzt, um auf die Datenbank zuzugreifen.
+ *
+ * Die Verbindung wird für alle Lese- und Schreiboperationen in der Datenbank verwendet, die von verschiedenen
+ * Repositories aufgerufen werden. Diese Repositories nutzen die von dieser Klasse bereitgestellte Verbindung, um
+ * SQL-Abfragen und Updates durchzuführen.
+ */
 public class SQLiteDB {
 
     private static final String URL = "jdbc:sqlite:plantpal.db";

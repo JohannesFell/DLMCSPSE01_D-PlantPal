@@ -11,6 +11,17 @@ import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
+/**
+ * Hauptklasse der Anwendung `PlantPal`.
+ *
+ * Diese Klasse startet die Anwendung und lädt die Haupt-Benutzeroberfläche. Sie ist der Einstiegspunkt
+ * der gesamten JavaFX-Anwendung und steuert die Initialisierung der grafischen Benutzeroberfläche.
+ *
+ * Funktionen:
+ * - Initialisierung des Hauptfensters der Anwendung
+ * - Laden der FXML-Dateien und Setzen der Hauptbühne
+ * - Starten der Anwendung und Festlegen des grundlegenden Anwendungslayouts
+ */
 public class PlantPalApp extends Application {
     
     private double x,y = 0;

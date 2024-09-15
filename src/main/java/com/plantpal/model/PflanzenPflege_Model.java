@@ -1,4 +1,4 @@
-package com.plantpal.app;
+package com.plantpal.model;
 
 import java.time.LocalDate;
 

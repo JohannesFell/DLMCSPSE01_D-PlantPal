@@ -1,37 +1,49 @@
 package com.plantpal.app;
 
-import com.plantpal.database.SQLiteDB;
+import com.plantpal.database.CareTaskHistoryRepository;
+import com.plantpal.database.PlantProfileRepository;
+import com.plantpal.logic.PflanzenProfileService;
+import com.plantpal.model.PflanzenProfile_Model;
+import com.plantpal.utils.DateUtils;
+import com.plantpal.utils.NotificationUtils;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.sql.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * Controller für das Pflanzenprofil-Management.
+ *
+ * Dieser Controller verwaltet die GUI-Interaktionen im Zusammenhang mit dem Pflanzenprofil.
+ * Dazu gehören das Hinzufügen, Aktualisieren und Löschen von Pflanzenprofilen,
+ * sowie das Verwalten von Formularfeldern und der Tabellenansicht.
+ *
+ * Es wird auch eine Such- und Filterfunktion bereitgestellt, um die Pflanzenprofile in der Tabelle
+ * dynamisch zu filtern. Änderungen an den Profilen werden außerdem in die Historie geschrieben.
+ *
+ * Benachrichtigungen werden über eine ausblendbare Notification-Komponente angezeigt.
+ *
+ * Initialisierung und Datenlogik werden über den `PflanzenProfileService` gesteuert.
+ *
+ * Zugehörige FXML-Datei: PflanzenProfile.fxml
+ */
 public class PflanzenProfileController implements Initializable {
 
     @FXML
     private TextField botanical_name, kaufdatum, last_duengen, last_giessen, name, search, standort;
 
-    @FXML private Label notificationLabel;
-
     @FXML
-    private Button btn_add, btn_clear, btn_delete, btn_update, image_import, image_show;
-
-    @FXML
-    private ImageView image;
+    private Label notificationLabel;
 
     @FXML
     private ComboBox<Integer> intervall_duengen, intervall_giessen;
@@ -46,23 +58,23 @@ public class PflanzenProfileController implements Initializable {
     private TableColumn<PflanzenProfile_Model, Integer> profile_int_duengen_col, profile_int_giessen_col;
 
     @FXML
-    private TableColumn<PflanzenProfile_Model, LocalDate> profile_kaufdatum, profile_last_duengen_col,
+    private TableColumn<PflanzenProfile_Model, String> profile_kaufdatum, profile_last_duengen_col,
             profile_last_giessen_col;
 
     private ObservableList<PflanzenProfile_Model> plantData;
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private FilteredList<PflanzenProfile_Model> filteredData;
 
-    private static final int TASK_ID_NAME_CHANGE = 1001;
-    private static final int TASK_ID_LOCATION_CHANGE = 1002;
-    private static final int TASK_ID_WATERING_INTERVAL_CHANGE = 1003;
-    private static final int TASK_ID_FERTILIZING_INTERVAL_CHANGE = 1004;
+    private PflanzenProfileService pflanzenProfileService;
 
     /**
      * Initialisiert den Controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialisiere den Service
+        PlantProfileRepository plantProfileRepository = new PlantProfileRepository();
+        CareTaskHistoryRepository careTaskHistoryRepository = new CareTaskHistoryRepository();
+        pflanzenProfileService = new PflanzenProfileService(plantProfileRepository, careTaskHistoryRepository);
 
         // ComboBox für Gieß- und Düngeintervall mit Werten 1-31 initialisieren
         ObservableList<Integer> intervalValues = FXCollections.observableArrayList();
@@ -70,12 +82,10 @@ public class PflanzenProfileController implements Initializable {
             intervalValues.add(i);
         }
 
-        // Werte in die ComboBoxen setzen
         intervall_giessen.setItems(intervalValues);
         intervall_duengen.setItems(intervalValues);
 
         plantData = FXCollections.observableArrayList();
-        // FilteredList mit der ObservableList initialisieren
         filteredData = new FilteredList<>(plantData, p -> true);
 
         // Einrichten der TableView-Spalten
@@ -102,173 +112,77 @@ public class PflanzenProfileController implements Initializable {
     }
 
     /**
-     * Lädt die Pflanzenprofildaten aus der Datenbank und aktualisiert die TableView
+     * Lädt die Pflanzenprofildaten aus der Datenbank und aktualisiert die TableView.
      */
     private void loadPlantData() {
-        plantData.clear();
-        String sql = "SELECT * FROM PlantProfile";
-        try (Connection conn = SQLiteDB.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                PflanzenProfile_Model plant = new PflanzenProfile_Model(
-                        rs.getInt("plant_id"),
-                        rs.getString("plant_name"),
-                        rs.getString("botanical_plant_name"),
-                        rs.getDate("purchase_date").toLocalDate(),
-                        rs.getString("location"),
-                        rs.getInt("watering_interval"),
-                        rs.getInt("fertilizing_interval"),
-                        rs.getDate("last_watered").toLocalDate(),
-                        rs.getDate("last_fertilized").toLocalDate(),
-                        rs.getString("image_path")
-                );
-                plantData.add(plant);
-            }
-            pflanzenProfil_tableView.setItems(plantData);
-        } catch (Exception e) {
-            System.out.println("Daten konnten nicht geladen werden.");
-            e.printStackTrace();
-        }
+        plantData.setAll(pflanzenProfileService.getAllPlantProfiles());
     }
 
     /**
-     * Fügt ein neues Pflanzenprofil in die Datenbank ein.
+     * Fügt ein neues Pflanzenprofil über die Geschäftslogik hinzu.
      */
     @FXML
     private void addPlant() {
-        String sql = "INSERT INTO PlantProfile (plant_name, botanical_plant_name, purchase_date, location, " +
-                "watering_interval, fertilizing_interval, last_watered, last_fertilized, image_path) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = SQLiteDB.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name.getText());
-            pstmt.setString(2, botanical_name.getText());
-            // Kaufdatum im Format dd.MM.yyyy
-            pstmt.setDate(3, java.sql.Date.valueOf(LocalDate.parse(kaufdatum.getText(), DATE_FORMATTER)));
-            pstmt.setString(4, standort.getText());
-            pstmt.setInt(5, getComboBoxValue(intervall_giessen));
-            pstmt.setInt(6, getComboBoxValue(intervall_duengen));
-            // last_watered auf das heutige Datum setzen
-            pstmt.setDate(7, java.sql.Date.valueOf(LocalDate.now()));
-            // last_fertilized auf das heutige Datum setzen
-            pstmt.setDate(8, java.sql.Date.valueOf(LocalDate.now()));
-            // Bildpfad vorerst leer
-            pstmt.setString(9, "");
+        PflanzenProfile_Model newPlant = new PflanzenProfile_Model(
+                0, name.getText(), botanical_name.getText(),
+                DateUtils.parseDate(kaufdatum.getText()),
+                standort.getText(), getComboBoxValue(intervall_giessen),
+                getComboBoxValue(intervall_duengen), LocalDate.now(), LocalDate.now(), ""
+        );
 
-            // Pflichtfelder prüfen
-            if (checkMandatoryFields()) {
-                pstmt.executeUpdate();
-                loadPlantData();
-                pflanzenProfil_tableView.refresh();
-                clearFormFields();  // Formular nach dem Hinzufügen leeren
-                showNotification("Pflanze erfolgreich hinzugefügt!");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Fehler beim Hinzufügen der Pflanze.");
-            e.printStackTrace();
+        // Pflichtfelder prüfen
+        if (checkMandatoryFields()) {
+            pflanzenProfileService.addPlantProfile(newPlant);
+            loadPlantData();
+            pflanzenProfil_tableView.refresh();
+            clearFormFields();
+            NotificationUtils.showNotification(notificationLabel, "Pflanze erfolgreich hinzugefügt!");
         }
     }
 
     /**
-     * Löscht ein ausgewähltes Pflanzenprofil aus der Datenbank.
+     * Löscht ein ausgewähltes Pflanzenprofil über die Geschäftslogik.
      */
     @FXML
     private void deletePlant() {
         PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
-        // Prüfe, ob eine Pflanze ausgewählt wurde
         if (selectedPlant != null) {
-            String sql = "DELETE FROM PlantProfile WHERE plant_id = ?";
-            try (Connection conn = SQLiteDB.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                // Setze die plant_id des ausgewählten Eintrags
-                pstmt.setInt(1, selectedPlant.getPlant_id());
-                // Führe das Löschen durch
-                pstmt.executeUpdate();
-                // Aktualisiere die TableView, um die gelöschte Pflanze zu entfernen
-                plantData.remove(selectedPlant);
-                pflanzenProfil_tableView.refresh();
-                // Leere das Formular, nachdem der Eintrag gelöscht wurde
-                clearFormFields();
-                showNotification("Pflanze erfolgreich gelöscht!");
-            } catch (SQLException e) {
-                System.out.println("Fehler beim Löschen der Pflanze.");
-                e.printStackTrace();
-            }
+            pflanzenProfileService.deletePlantProfile(selectedPlant.getPlant_id());
+            loadPlantData();
+            pflanzenProfil_tableView.refresh();
+            clearFormFields();
+            NotificationUtils.showNotification(notificationLabel, "Pflanze erfolgreich gelöscht!");
         }
     }
 
     /**
-     * Aktualisiert das ausgewählte Pflanzenprofil in der Datenbank.
-     * Änderungen im Namen, Standort oder bei den Gieß-/Düngeintervalle werden in die Historie fortgeschrieben.
+     * Aktualisiert das ausgewählte Pflanzenprofil und schreibt Änderungen in die Historie.
      */
     @FXML
     private void updatePlantProfile() {
-        // Hole die ausgewählte Pflanze aus der TableView
         PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
-
         if (selectedPlant != null) {
-            String sql = "SELECT plant_name, location, watering_interval, fertilizing_interval FROM PlantProfile WHERE plant_id = ?";
-            try (Connection conn = SQLiteDB.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try {
+                // Verwende den DateTimeFormatter zum Parsen des Datums
+                LocalDate parsedKaufdatum = DateUtils.parseDate(kaufdatum.getText());
 
-                // Aktuelle Werte aus der Datenbank laden
-                stmt.setInt(1, selectedPlant.getPlant_id());
-                ResultSet rs = stmt.executeQuery();
+                selectedPlant.setPlant_name(name.getText());
+                selectedPlant.setBotanical_plant_name(botanical_name.getText());
+                selectedPlant.setPurchase_date(parsedKaufdatum);
+                selectedPlant.setLocation(standort.getText());
+                selectedPlant.setWatering_interval(intervall_giessen.getValue());
+                selectedPlant.setFertilizing_interval(intervall_duengen.getValue());
 
-                if (rs.next()) {
-                    String currentName = rs.getString("plant_name");
-                    String currentLocation = rs.getString("location");
-                    int currentWateringInterval = rs.getInt("watering_interval");
-                    int currentFertilizingInterval = rs.getInt("fertilizing_interval");
+                // Aktualisiere das Pflanzenprofil und schreibe die Historie
+                pflanzenProfileService.updatePlantProfile(selectedPlant);
+                NotificationUtils.showNotification(notificationLabel, "Profil erfolgreich aktualisiert");
 
-                    // Beginne die Transaktion
-                    conn.setAutoCommit(false);
-
-                    // Überprüfe und speichere die Änderungen in der Historie
-                    if (!currentName.equals(name.getText())) {
-                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_NAME_CHANGE, "Name geändert", currentName, name.getText(), LocalDate.now());
-                    }
-
-                    if (!currentLocation.equals(standort.getText())) {
-                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_LOCATION_CHANGE, "Standort geändert", currentLocation, standort.getText(), LocalDate.now());
-                    }
-
-                    if (currentWateringInterval != getComboBoxValue(intervall_giessen)) {
-                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_WATERING_INTERVAL_CHANGE, "Gießintervall geändert", String.valueOf(currentWateringInterval), String.valueOf(getComboBoxValue(intervall_giessen)), LocalDate.now());
-                    }
-
-                    if (currentFertilizingInterval != getComboBoxValue(intervall_duengen)) {
-                        insertIntoHistoryWithNote(conn, selectedPlant.getPlant_id(), TASK_ID_FERTILIZING_INTERVAL_CHANGE, "Düngungsintervall geändert", String.valueOf(currentFertilizingInterval), String.valueOf(getComboBoxValue(intervall_duengen)), LocalDate.now());
-                    }
-
-                    // Führe das Update des Profils aus
-                    String updateSql = "UPDATE PlantProfile SET plant_name = ?, botanical_plant_name = ?, purchase_date = ?, " +
-                            "location = ?, watering_interval = ?, fertilizing_interval = ? WHERE plant_id = ?";
-                    try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-                        updateStmt.setString(1, name.getText());
-                        updateStmt.setString(2, botanical_name.getText());
-                        updateStmt.setDate(3, java.sql.Date.valueOf(LocalDate.parse(kaufdatum.getText(), DATE_FORMATTER)));
-                        updateStmt.setString(4, standort.getText());
-                        updateStmt.setInt(5, getComboBoxValue(intervall_giessen));
-                        updateStmt.setInt(6, getComboBoxValue(intervall_duengen));
-                        updateStmt.setInt(7, selectedPlant.getPlant_id());
-                        updateStmt.executeUpdate();
-                    }
-
-                    // Commit der Transaktion
-                    conn.commit();
-
-                    // Tabelle aktualisieren
-                    loadPlantData();
-                    pflanzenProfil_tableView.refresh();
-                    clearFormFields();  // Formular nach dem Update leeren
-                    showNotification("Pflanze erfolgreich aktualisiert!");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Tabelle aktualisieren
+                loadPlantData();
+                pflanzenProfil_tableView.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                NotificationUtils.showNotification(notificationLabel, "Fehler beim Aktualisieren des Profils");
             }
         }
     }
@@ -278,20 +192,17 @@ public class PflanzenProfileController implements Initializable {
      * Die Suche filtert nach Name, botanischer Name und Standort.
      */
     private void applySearchFilter() {
-        // Hinzufügen eines Listeners für das TextField "search"
         search.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(plant -> {
-                // Wenn das Suchfeld leer ist, zeige alle Daten an
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                // Verarbeite die Eingabe als Suchtext, ignoriere Groß-/Kleinschreibung
                 String lowerCaseFilter = newValue.toLowerCase();
                 return plant.getPlant_name().toLowerCase().contains(lowerCaseFilter) ||
                         plant.getBotanical_plant_name().toLowerCase().contains(lowerCaseFilter) ||
                         plant.getLocation().toLowerCase().contains(lowerCaseFilter);
             });
-            pflanzenProfil_tableView.refresh();  // Stellt sicher, dass die gefilterten Daten angezeigt werden
+            pflanzenProfil_tableView.refresh();
         });
     }
 
@@ -300,77 +211,57 @@ public class PflanzenProfileController implements Initializable {
      */
     @FXML
     private void clearFormFields() {
-        // Alle Textfelder leeren
         name.clear();
         botanical_name.clear();
         kaufdatum.clear();
         standort.clear();
-
-        // Komboboxen auf Standardwert setzen
         intervall_giessen.getSelectionModel().clearSelection();
         intervall_duengen.getSelectionModel().clearSelection();
         last_giessen.clear();
         last_duengen.clear();
-
-        // Bildvorschau/Pfad zurücksetzen (optional, falls verwendet)
         pflanzenProfil_tableView.getSelectionModel().clearSelection();
     }
 
     /**
-     * Logik zum Ausfüllen der Formularfelder basierend auf der ausgewählten Zeile in der TableView.
+     * Füllt die Formularfelder basierend auf der ausgewählten Zeile in der TableView.
+     *
+     * @param plant Das ausgewählte Pflanzenprofil.
      */
     private void populateFormFields(PflanzenProfile_Model plant) {
         name.setText(plant.getPlant_name());
         botanical_name.setText(plant.getBotanical_plant_name());
-        kaufdatum.setText(plant.getPurchase_date() != null ? plant.getPurchase_date().format(DATE_FORMATTER) : "");
+        kaufdatum.setText(DateUtils.formatDate(plant.getPurchase_date()));
         standort.setText(plant.getLocation());
         intervall_giessen.setValue(plant.getWatering_interval());
         intervall_duengen.setValue(plant.getFertilizing_interval());
-        last_giessen.setText(plant.getLast_watered() != null ? plant.getLast_watered().format(DATE_FORMATTER) : "");
-        last_duengen.setText(plant.getLast_fertilized() != null ? plant.getLast_fertilized().format(DATE_FORMATTER) : "");
+        last_giessen.setText(DateUtils.formatDate(plant.getLast_watered()));
+        last_duengen.setText(DateUtils.formatDate(plant.getLast_fertilized()));
     }
 
     /**
-     * Einrichten der TableView-Spalten.
+     * Initialisiert die Spalten der TableView.
      */
     private void setupTableColumns() {
-        profile_name_col.setCellValueFactory(new PropertyValueFactory<>("plant_name"));
-        profile_bot_name_col.setCellValueFactory(new PropertyValueFactory<>("botanical_plant_name"));
-        profile_kaufdatum.setCellValueFactory(new PropertyValueFactory<>("purchase_date"));
-        profile_standort_col.setCellValueFactory(new PropertyValueFactory<>("location"));
-        profile_int_giessen_col.setCellValueFactory(new PropertyValueFactory<>("watering_interval"));
-        profile_int_duengen_col.setCellValueFactory(new PropertyValueFactory<>("fertilizing_interval"));
-        profile_last_giessen_col.setCellValueFactory(new PropertyValueFactory<>("last_watered"));
-        profile_last_duengen_col.setCellValueFactory(new PropertyValueFactory<>("last_fertilized"));
+        profile_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPlant_name()));
+        profile_bot_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBotanical_plant_name()));
+        profile_standort_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
+        profile_int_giessen_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getWatering_interval()).asObject());
+        profile_int_duengen_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getFertilizing_interval()).asObject());
 
+        // Datumsspalten mit formatiertem Datum
+        profile_kaufdatum.setCellValueFactory(data -> DateUtils.formatProperty(data.getValue().getPurchase_date()));
+        profile_last_giessen_col.setCellValueFactory(data -> DateUtils.formatProperty(data.getValue().getLast_watered()));
+        profile_last_duengen_col.setCellValueFactory(data -> DateUtils.formatProperty(data.getValue().getLast_fertilized()));
+
+        // Hinzufügen des Suffixes für die Intervall-Spalten
         addSuffixToColumn(profile_int_giessen_col, profile_int_duengen_col);
-
-        // Wendet die Datumsformatierung auf die Spalten an
-        applyDateFormatting(profile_kaufdatum, profile_last_giessen_col, profile_last_duengen_col);
     }
 
     /**
-     * Wendet die Datumsformatierung auf die gegebenen Spalten an.
-     */
-    @SafeVarargs
-    private void applyDateFormatting(TableColumn<PflanzenProfile_Model, LocalDate>... columns) {
-        for (TableColumn<PflanzenProfile_Model, LocalDate> column : columns) {
-            column.setCellFactory(col -> new TextFieldTableCell<>(new StringConverter<>() {
-                @Override
-                public String toString(LocalDate date) {
-                    return date != null ? date.format(PflanzenProfileController.DATE_FORMATTER) : "";
-                }
-
-                @Override
-                public LocalDate fromString(String string) {
-                    return string != null && !string.isEmpty() ? LocalDate.parse(string, PflanzenProfileController.DATE_FORMATTER) : null;
-                }
-            }));
-        }
-    }
-
-    /**
-     * Hilfsfunktion, um den Wert einer ComboBox abzurufen.
+     * Ruft den Wert einer ComboBox ab.
+     *
+     * @param comboBox Die zu überprüfende ComboBox.
+     * @return Der ausgewählte Wert oder 0, wenn kein Wert ausgewählt ist.
      */
     private int getComboBoxValue(ComboBox<Integer> comboBox) {
         return comboBox.getSelectionModel().getSelectedItem() != null ? comboBox.getSelectionModel().getSelectedItem() : 0;
@@ -378,90 +269,61 @@ public class PflanzenProfileController implements Initializable {
 
     /**
      * Zeigt eine Benachrichtigung mit einer Einblendanimation an.
+     *
      * @param message Die Nachricht, die angezeigt werden soll.
      */
     private void showNotification(String message) {
         notificationLabel.setText(message);
         notificationLabel.setVisible(true);
 
-        // Animation: Einblenden von oben nach unten
         TranslateTransition slideIn = new TranslateTransition(Duration.seconds(0.5), notificationLabel);
-        slideIn.setFromY(-60); // Startet außerhalb des Bildschirms
-        slideIn.setToY(0); // Endet an der gewünschten Position
+        slideIn.setFromY(-60);
+        slideIn.setToY(0);
         slideIn.setOnFinished(event -> {
-            // Nach einer kurzen Pause wieder ausblenden
             TranslateTransition slideOut = new TranslateTransition(Duration.seconds(0.5), notificationLabel);
-            slideOut.setDelay(Duration.seconds(2)); // 2 Sekunden warten
+            slideOut.setDelay(Duration.seconds(2));
             slideOut.setFromY(0);
-            slideOut.setToY(-60); // Gleitet wieder nach oben heraus
+            slideOut.setToY(-60);
             slideOut.setOnFinished(e -> notificationLabel.setVisible(false));
             slideOut.play();
         });
         slideIn.play();
     }
 
+    /**
+     * Überprüft, ob die Pflichtfelder für das Pflanzenprofil ausgefüllt sind.
+     *
+     * @return true, wenn alle Pflichtfelder ausgefüllt sind, sonst false.
+     */
     private boolean checkMandatoryFields() {
-        // Prüfe, ob das Gieß-Intervall ausgewählt wurde
-        if (intervall_giessen.getValue() == null || intervall_giessen.getValue().toString().isEmpty()) {
+        if (intervall_giessen.getValue() == null) {
             showNotification("Bitte ein Gieß-Intervall auswählen.");
             return false;
         }
-
-        // Prüfe, ob das Düng-Intervall ausgewählt wurde
-        if (intervall_duengen.getValue() == null || intervall_duengen.getValue().toString().isEmpty()) {
+        if (intervall_duengen.getValue() == null) {
             showNotification("Bitte ein Düng-Intervall auswählen.");
             return false;
         }
-
         return true;
     }
 
-    // Methode zur Anpassung der Anzeige für Intervalle (z.B. Gießen, Düngen)
+    /**
+     * Fügt der Anzeige der Gieß- und Düngeintervalle das Suffix "Tage" hinzu.
+     */
     @SafeVarargs
-    public final void addSuffixToColumn(TableColumn<PflanzenProfile_Model, Integer>... columns) {
+    private void addSuffixToColumn(TableColumn<PflanzenProfile_Model, Integer>... columns) {
         for (TableColumn<PflanzenProfile_Model, Integer> column : columns) {
             column.setCellFactory(col -> new TableCell<>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
-                        setText(null);  // Wenn kein Wert vorhanden ist
+                        setText(null);
                     } else {
-                        setText(item + " Tage");  // Füge "Tage" Suffix hinzu
+                        setText(item + " Tage");
                     }
                 }
             });
-        }
-    }
-
-    /**
-     * Fügt einen Eintrag in die CareTaskHistory mit einer Notiz hinzu, die den alten und neuen Wert enthält.
-     *
-     * @param conn            Die Datenbankverbindung.
-     * @param plantId         Die ID der Pflanze.
-     * @param taskId          Die ID der Aufgabe (z.B. TASK_ID_NAME_CHANGE).
-     * @param action          Der Typ der Aktion (z.B. "Name geändert").
-     * @param oldValue        Der alte Wert.
-     * @param newValue        Der neue Wert.
-     * @param completionDate  Das Datum der Änderung.
-     * @throws SQLException   Wenn ein Fehler bei der Datenbankoperation auftritt.
-     */
-    private void insertIntoHistoryWithNote(Connection conn, int plantId, int taskId, String action, String oldValue, String newValue, LocalDate completionDate) throws SQLException {
-        if (oldValue.equals(newValue)) {
-            return;  // Wenn keine Änderung vorliegt, wird nichts in die Historie geschrieben
-        }
-
-        // Erstelle die Notiz mit dem alten und neuen Wert
-        String note = "Alter Wert: " + oldValue + "|| Neuer Wert: " + newValue;
-
-        String sql = "INSERT INTO CareTaskHistory (plant_id, task_id, task_type, completion_date, note) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, plantId);
-            stmt.setInt(2, taskId);
-            stmt.setString(3, action);
-            stmt.setDate(4, java.sql.Date.valueOf(completionDate));
-            stmt.setString(5, note);
-            stmt.executeUpdate();
         }
     }
 }
