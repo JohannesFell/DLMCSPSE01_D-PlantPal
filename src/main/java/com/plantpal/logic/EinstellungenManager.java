@@ -33,26 +33,4 @@ public class EinstellungenManager {
     public void saveSettings(Einstellungen_Model settings) {
         settingsRepository.updateSettings(settings);
     }
-
-    /**
-     * Validiert die Benutzereingaben.
-     *
-     * @param settings Die Einstellungen, die validiert werden sollen.
-     * @return true, wenn die Eingaben gültig sind, sonst false.
-     */
-    public boolean validateSettings(Einstellungen_Model settings) {
-        if (settings.getEmailAddress().isEmpty()
-                || settings.getSmtpUsername().isEmpty()
-                || settings.getSmtpPassword().isEmpty()) {
-            return false;
-        }
-
-        try {
-            Integer.parseInt(String.valueOf(settings.getSmtpPort()));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return true;
-    }
 }

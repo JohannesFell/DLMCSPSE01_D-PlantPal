@@ -1,123 +1,58 @@
 package com.plantpal.model;
 
+/**
+ * Das Modell für die Anwendungseinstellungen.
+ * Enthält die Konfigurationsdaten, die in der Settings-Tabelle gespeichert sind,
+ * sowie die Getter und Setter für die Verwaltung dieser Daten.
+ */
 public class Einstellungen_Model {
 
     private String username;
-    private String emailAddress;
-    private String smtpHost;
-    private int smtpPort;
-    private String smtpUsername;
-    private String smtpPassword;
-    private boolean useTls;
-    private int daysBeforeReminder;
+    private String emailAddressSender;
+    private String notificationEmail;
     private boolean appNotification;
     private boolean emailNotification;
-    private String notificationEmail;
+    private int daysBeforeReminderApp;
+    private String apiKey;
+    private String privateApiKey;
 
-    // Constructor
-    public Einstellungen_Model(String username, String emailAddress, String smtpHost, int smtpPort, String smtpUsername,
-                         String smtpPassword, boolean useTls, int daysBeforeReminder, boolean appNotification,
-                         boolean emailNotification, String notificationEmail) {
+    // Konstruktor
+    public Einstellungen_Model(String username, String emailAddressSender, boolean appNotification,
+                               boolean emailNotification, int daysBeforeReminderApp, String notificationEmail,
+                               String apiKey, String privateApiKey) {
         this.username = username;
-        this.emailAddress = emailAddress;
-        this.smtpHost = smtpHost;
-        this.smtpPort = smtpPort;
-        this.smtpUsername = smtpUsername;
-        this.smtpPassword = smtpPassword;
-        this.useTls = useTls;
-        this.daysBeforeReminder = daysBeforeReminder;
+        this.emailAddressSender = emailAddressSender;
         this.appNotification = appNotification;
         this.emailNotification = emailNotification;
+        this.daysBeforeReminderApp = daysBeforeReminderApp;
         this.notificationEmail = notificationEmail;
+        this.apiKey = apiKey;
+        this.privateApiKey = privateApiKey;
     }
 
-    // Getters and Setters for each field
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    // Getter und Setter
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
+    public String getEmailAddressSender() { return emailAddressSender; }
+    public void setEmailAddressSender(String emailAddressSender) { this.emailAddressSender = emailAddressSender; }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
+    public boolean isAppNotification() { return appNotification; }
+    public void setAppNotification(boolean appNotification) { this.appNotification = appNotification; }
 
-    public String getSmtpHost() {
-        return smtpHost;
-    }
+    public boolean isEmailNotification() { return emailNotification; }
+    public void setEmailNotification(boolean emailNotification) { this.emailNotification = emailNotification; }
 
-    public void setSmtpHost(String smtpHost) {
-        this.smtpHost = smtpHost;
-    }
+    public int getDaysBeforeReminderApp() { return daysBeforeReminderApp; }
+    public void setDaysBeforeReminderApp(int daysBeforeReminderApp) { this.daysBeforeReminderApp = daysBeforeReminderApp; }
 
-    public int getSmtpPort() {
-        return smtpPort;
-    }
+    public String getNotificationEmail() { return notificationEmail; }
+    public void setNotificationEmail(String notificationEmail) { this.notificationEmail = notificationEmail; }
 
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
+    public String getApiKey() { return apiKey; }
+    public void setApiKey(String apiKey) { this.apiKey = apiKey; }
 
-    public String getSmtpUsername() {
-        return smtpUsername;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public String getSmtpPassword() {
-        return smtpPassword;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public boolean isUseTls() {
-        return useTls;
-    }
-
-    public void setUseTls(boolean useTls) {
-        this.useTls = useTls;
-    }
-
-    public int getDaysBeforeReminder() {
-        return daysBeforeReminder;
-    }
-
-    public void setDaysBeforeReminder(int daysBeforeReminder) {
-        this.daysBeforeReminder = daysBeforeReminder;
-    }
-
-    public boolean isAppNotification() {
-        return appNotification;
-    }
-
-    public void setAppNotification(boolean appNotification) {
-        this.appNotification = appNotification;
-    }
-
-    public boolean isEmailNotification() {
-        return emailNotification;
-    }
-
-    public void setEmailNotification(boolean emailNotification) {
-        this.emailNotification = emailNotification;
-    }
-
-    public String getNotificationEmail() {
-        return notificationEmail;
-    }
-
-    public void setNotificationEmail(String notificationEmail) {
-        this.notificationEmail = notificationEmail;
-    }
+    public String getPrivateApiKey() { return privateApiKey; }
+    public void setPrivateApiKey(String privateApiKey) { this.privateApiKey = privateApiKey; }
 }
-

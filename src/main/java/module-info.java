@@ -13,6 +13,9 @@ module com.plantpal.PlantPal {
     requires eu.hansolo.tilesfx;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires unirest.java;
+    requires com.mailjet.api;
+    requires org.json;
 
     opens com.plantpal.app to javafx.fxml;
     exports com.plantpal.app;

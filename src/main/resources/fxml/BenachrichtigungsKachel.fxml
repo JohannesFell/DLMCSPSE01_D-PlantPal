@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="189.0" prefWidth="287.0" styleClass="notification_Tile" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.BenachrichtigungsController">
+
+   <Label fx:id="lbl_pflanzenname" layoutX="14.0" layoutY="19.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Pflanzenname:">
+      <font>
+         <Font name="Tahoma" size="12.0" />
+      </font></Label>
+
+   <Label fx:id="lbl_standort" layoutX="14.0" layoutY="49.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Standort:" />
+
+   <Label fx:id="lbl_aufgabe" layoutX="14.0" layoutY="79.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Aufgabe:" />
+
+   <Label fx:id="lbl_faelligkeitsdatum" layoutX="14.0" layoutY="109.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Fällig am: " />
+
+   <Button fx:id="btn_erledigen" layoutX="205.0" layoutY="145.0" mnemonicParsing="false" onAction="#erledigt" stylesheets="@Style.css" text="Erledigen">
+      <styleClass>
+         <String fx:value="action_buttons" />
+         <String fx:value="action_buttons" />
+      </styleClass></Button>
+   <TextField fx:id="txt_pflanzenname" editable="false" layoutX="126.0" layoutY="14.0" styleClass="formular_textFields" stylesheets="@Style.css" />
+   <TextField fx:id="txt_standort" editable="false" layoutX="126.0" layoutY="45.0" styleClass="formular_textFields" stylesheets="@Style.css" />
+   <TextField fx:id="txt_aufgabe" editable="false" layoutX="126.0" layoutY="75.0" styleClass="formular_textFields" stylesheets="@Style.css" />
+   <TextField fx:id="txt_faellig_am" editable="false" layoutX="126.0" layoutY="105.0" styleClass="formular_textFields" stylesheets="@Style.css" />
+</AnchorPane>

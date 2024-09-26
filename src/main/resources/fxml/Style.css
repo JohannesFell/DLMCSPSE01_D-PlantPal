@@ -124,3 +124,21 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
+
+.notification_Tile {
+    -fx-background-color: #495D5E;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #D2DBC8;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.transparent-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}

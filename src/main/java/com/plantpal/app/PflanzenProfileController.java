@@ -6,7 +6,6 @@ import com.plantpal.logic.PflanzenProfileService;
 import com.plantpal.model.PflanzenProfile_Model;
 import com.plantpal.utils.DateUtils;
 import com.plantpal.utils.NotificationUtils;
-import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,7 +14,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -268,40 +266,17 @@ public class PflanzenProfileController implements Initializable {
     }
 
     /**
-     * Zeigt eine Benachrichtigung mit einer Einblendanimation an.
-     *
-     * @param message Die Nachricht, die angezeigt werden soll.
-     */
-    private void showNotification(String message) {
-        notificationLabel.setText(message);
-        notificationLabel.setVisible(true);
-
-        TranslateTransition slideIn = new TranslateTransition(Duration.seconds(0.5), notificationLabel);
-        slideIn.setFromY(-60);
-        slideIn.setToY(0);
-        slideIn.setOnFinished(event -> {
-            TranslateTransition slideOut = new TranslateTransition(Duration.seconds(0.5), notificationLabel);
-            slideOut.setDelay(Duration.seconds(2));
-            slideOut.setFromY(0);
-            slideOut.setToY(-60);
-            slideOut.setOnFinished(e -> notificationLabel.setVisible(false));
-            slideOut.play();
-        });
-        slideIn.play();
-    }
-
-    /**
      * Überprüft, ob die Pflichtfelder für das Pflanzenprofil ausgefüllt sind.
      *
      * @return true, wenn alle Pflichtfelder ausgefüllt sind, sonst false.
      */
     private boolean checkMandatoryFields() {
         if (intervall_giessen.getValue() == null) {
-            showNotification("Bitte ein Gieß-Intervall auswählen.");
+            NotificationUtils.showNotification(notificationLabel,"Bitte ein Gieß-Intervall auswählen.");
             return false;
         }
         if (intervall_duengen.getValue() == null) {
-            showNotification("Bitte ein Düng-Intervall auswählen.");
+            NotificationUtils.showNotification(notificationLabel, "Bitte ein Düng-Intervall auswählen.");
             return false;
         }
         return true;

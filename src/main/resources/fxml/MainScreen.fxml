@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -13,86 +14,87 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="root_mainscreen" maxWidth="1080.0" minHeight="800.0" minWidth="1200.0" prefHeight="800.0"
-      prefWidth="1920.0" styleClass="root_mainscreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.MainScreenController">
+<HBox fx:id="root_mainscreen" maxWidth="1080.0" minHeight="800.0" minWidth="1200.0" prefHeight="800.0" prefWidth="1920.0" styleClass="root_mainscreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.MainScreenController">
    <VBox prefHeight="543.0" prefWidth="193.0">
-      <AnchorPane fx:id="sidebar_anchorpane" prefHeight="1080.0" prefWidth="1080.0" styleClass="sidebar_anchorpane"
-                  stylesheets="@Style.css">
+      <AnchorPane fx:id="sidebar_anchorpane" prefHeight="1080.0" prefWidth="1080.0" styleClass="sidebar_anchorpane" stylesheets="@Style.css">
          <Pane fx:id="sidebar_inner_pane" layoutX="14.0" layoutY="25.0" prefHeight="151.0" prefWidth="165.0">
-            <ImageView fitHeight="107.0" fitWidth="105.0" layoutX="30.0" layoutY="23.0" pickOnBounds="true"
-                       preserveRatio="true">
-               <Image url="@../images/plantpal-icon.png"/>
+            <ImageView fitHeight="107.0" fitWidth="105.0" layoutX="30.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../images/plantpal-icon.png" />
             </ImageView>
          </Pane>
-         <Button fx:id="btn_pflanzen" layoutX="11.0" layoutY="302.0" mnemonicParsing="false"
-                 onAction="#pflanzenprofile" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css"
-                 text="Pflanzen">
+         <Button fx:id="btn_pflanzen" layoutX="11.0" layoutY="302.0" mnemonicParsing="false" onAction="#pflanzenprofile" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css" text="Pflanzen">
             <cursor>
-               <Cursor fx:constant="HAND"/>
+               <Cursor fx:constant="HAND" />
             </cursor>
             <font>
-               <Font name="System Bold" size="13.0"/>
+               <Font name="System Bold" size="13.0" />
             </font>
             <styleClass>
-               <String fx:value="sidebar_buttons"/>
-               <String fx:value="sidebar_buttons"/>
+               <String fx:value="sidebar_buttons" />
+               <String fx:value="sidebar_buttons" />
             </styleClass>
          </Button>
-         <Button fx:id="btn_pflege" layoutX="11.0" layoutY="356.0" mnemonicParsing="false"
-                 onAction="#pflanzenpflege" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css"
-                 text="Pflege">
+         <Button fx:id="btn_pflege" layoutX="11.0" layoutY="356.0" mnemonicParsing="false" onAction="#pflanzenpflege" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css" text="Pflege">
             <cursor>
-               <Cursor fx:constant="HAND"/>
+               <Cursor fx:constant="HAND" />
             </cursor>
             <font>
-               <Font name="System Bold" size="13.0"/>
+               <Font name="System Bold" size="13.0" />
             </font>
             <styleClass>
-               <String fx:value="sidebar_buttons"/>
-               <String fx:value="sidebar_buttons"/>
+               <String fx:value="sidebar_buttons" />
+               <String fx:value="sidebar_buttons" />
             </styleClass>
          </Button>
-         <Button fx:id="btn_wissensdatenbank" layoutX="11.0" layoutY="409.0" mnemonicParsing="false"
-                 onAction="#wissensdatenbank" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css"
-                 text="Wissensdatenbank">
+         <Button fx:id="btn_wissensdatenbank" layoutX="11.0" layoutY="409.0" mnemonicParsing="false" onAction="#wissensdatenbank" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css" text="Wissensdatenbank">
             <cursor>
-               <Cursor fx:constant="HAND"/>
+               <Cursor fx:constant="HAND" />
             </cursor>
             <font>
-               <Font name="System Bold" size="13.0"/>
+               <Font name="System Bold" size="13.0" />
             </font>
             <styleClass>
-               <String fx:value="sidebar_buttons"/>
-               <String fx:value="sidebar_buttons"/>
+               <String fx:value="sidebar_buttons" />
+               <String fx:value="sidebar_buttons" />
             </styleClass>
          </Button>
-         <Button fx:id="btn_einstellungen" layoutX="11.0" layoutY="465.0" mnemonicParsing="false"
-                 onAction="#einstellungen" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css"
-                 text="Einstellungen">
+         <Button fx:id="btn_einstellungen" layoutX="11.0" layoutY="465.0" mnemonicParsing="false" onAction="#einstellungen" prefHeight="33.0" prefWidth="171.0" stylesheets="@Style.css" text="Einstellungen">
             <cursor>
-               <Cursor fx:constant="HAND"/>
+               <Cursor fx:constant="HAND" />
             </cursor>
             <font>
-               <Font name="System Bold" size="13.0"/>
+               <Font name="System Bold" size="13.0" />
             </font>
             <styleClass>
-               <String fx:value="sidebar_buttons"/>
-               <String fx:value="sidebar_buttons"/>
+               <String fx:value="sidebar_buttons" />
+               <String fx:value="sidebar_buttons" />
             </styleClass>
          </Button>
       </AnchorPane>
    </VBox>
    <AnchorPane prefHeight="800.0" prefWidth="1007.0">
-      <StackPane fx:id="contentArea" layoutY="57.0" prefHeight="743.0" prefWidth="1007.0"
-                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                 AnchorPane.topAnchor="57.0"/>
+      <StackPane fx:id="contentArea" layoutY="57.0" prefHeight="743.0" prefWidth="1007.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="57.0" />
       <Label fx:id="exit" layoutX="968.0" layoutY="14.0" prefHeight="25.0" prefWidth="25.0">
          <graphic>
             <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../images/close.png"/>
+               <Image url="@../images/close.png" />
             </ImageView>
          </graphic>
+      </Label>
+      <FontAwesomeIconView fx:id="btn_notifications" fill="#d2dbc8" glyphName="BELL" layoutX="14.0" layoutY="35.0" size="25" onMouseClicked="#showNotifications">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </FontAwesomeIconView>
+      <Label fx:id="lbl_notification_count" layoutX="45.0" layoutY="18.0" textFill="#d2dbc8">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0" styleClass="notificationLabel" stylesheets="@Style.css" visible="false">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font>
       </Label>
    </AnchorPane>
 </HBox>

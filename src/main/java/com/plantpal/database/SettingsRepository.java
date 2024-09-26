@@ -21,16 +21,9 @@ public class SettingsRepository {
     // Singleton-Instanz der Klasse
     private static SettingsRepository instance;
 
-    // Privater Konstruktor, um direkte Instanziierung zu verhindern
     private SettingsRepository() {
     }
 
-    /**
-     * Gibt die Singleton-Instanz von SettingsRepository zurück.
-     * Falls keine Instanz existiert, wird sie erstellt.
-     *
-     * @return Instanz von SettingsRepository
-     */
     public static SettingsRepository getInstance() {
         if (instance == null) {
             instance = new SettingsRepository();
@@ -52,16 +45,13 @@ public class SettingsRepository {
             if (rs.next()) {
                 return new Einstellungen_Model(
                         rs.getString("username"),
-                        rs.getString("email_address"),
-                        rs.getString("smtp_host"),
-                        rs.getInt("smtp_port"),
-                        rs.getString("smtp_username"),
-                        rs.getString("smtp_password"),  // Passwort (entschlüsseln falls erforderlich)
-                        rs.getBoolean("use_tls"),
-                        rs.getInt("days_before_reminder"),
+                        rs.getString("email_address_sender"),
                         rs.getBoolean("app_notification"),
                         rs.getBoolean("email_notification"),
-                        rs.getString("notification_email")
+                        rs.getInt("days_before_reminder_app"),
+                        rs.getString("notification_email"),
+                        rs.getString("api_key"),
+                        rs.getString("private_api_key")
                 );
             }
 
@@ -77,25 +67,20 @@ public class SettingsRepository {
      * @param settings Ein Einstellungen_Model, das die neuen Einstellungen enthält
      */
     public void updateSettings(Einstellungen_Model settings) {
-        String sql = "UPDATE Settings SET username = ?, email_address = ?, smtp_host = ?, smtp_port = ?, smtp_username = ?, " +
-                "smtp_password = ?, use_tls = ?, days_before_reminder = ?, app_notification = ?, email_notification = ?, " +
-                "notification_email = ? WHERE settings_id = 1";
+        String sql = "UPDATE Settings SET username = ?, email_address_sender = ?, app_notification = ?, " +
+                "email_notification = ?, days_before_reminder_app = ?, notification_email = ?, api_key = ?, private_api_key = ? WHERE settings_id = 1";
 
         try (Connection conn = SQLiteDB.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Die Werte aus dem Einstellungen_Model werden in das PreparedStatement gesetzt
             pstmt.setString(1, settings.getUsername());
-            pstmt.setString(2, settings.getEmailAddress());
-            pstmt.setString(3, settings.getSmtpHost());
-            pstmt.setInt(4, settings.getSmtpPort());
-            pstmt.setString(5, settings.getSmtpUsername());
-            pstmt.setString(6, settings.getSmtpPassword());
-            pstmt.setBoolean(7, settings.isUseTls());
-            pstmt.setInt(8, settings.getDaysBeforeReminder());
-            pstmt.setBoolean(9, settings.isAppNotification());
-            pstmt.setBoolean(10, settings.isEmailNotification());
-            pstmt.setString(11, settings.getNotificationEmail());
+            pstmt.setString(2, settings.getEmailAddressSender());
+            pstmt.setBoolean(3, settings.isAppNotification());
+            pstmt.setBoolean(4, settings.isEmailNotification());
+            pstmt.setInt(5, settings.getDaysBeforeReminderApp());
+            pstmt.setString(6, settings.getNotificationEmail());
+            pstmt.setString(7, settings.getApiKey());
+            pstmt.setString(8, settings.getPrivateApiKey());
 
             pstmt.executeUpdate();
 

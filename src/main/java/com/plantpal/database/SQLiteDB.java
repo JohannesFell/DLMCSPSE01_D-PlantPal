@@ -81,14 +81,6 @@ public class SQLiteDB {
                 "FOREIGN KEY(plant_id) REFERENCES PlantProfile(plant_id)" +
                 ");";
 
-        String reminderTable = "CREATE TABLE IF NOT EXISTS Reminder (" +
-                "reminder_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "task_id INTEGER," +
-                "reminder_date DATETIME NOT NULL," +
-                "sent BOOLEAN NOT NULL DEFAULT false," +
-                "FOREIGN KEY(task_id) REFERENCES CareTask(task_id)" +
-                ");";
-
         String knowledgeBaseTable = "CREATE TABLE IF NOT EXISTS KnowledgeBase (" +
                 "knowledge_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT NOT NULL, " +
@@ -108,16 +100,13 @@ public class SQLiteDB {
         String settingsTable = "CREATE TABLE IF NOT EXISTS Settings (" +
                 "settings_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "username TEXT NOT NULL," +
-                "email_address TEXT NOT NULL DEFAULT ''," +                         // E-Mail-Adresse für den Versand von Benachrichtigungen
-                "smtp_host TEXT NOT NULL DEFAULT 'smtp.gmail.com'," +               // Gmail-Host vorbelegt
-                "smtp_port INTEGER NOT NULL DEFAULT 587," +                         // Standard TLS-Port für Gmail
-                "smtp_username TEXT NOT NULL DEFAULT ''," +                         // SMTP-Benutzername (meist die gleiche E-Mail)
-                "smtp_password TEXT NOT NULL DEFAULT ''," +                         // Passwort (verschlüsselt speichern)
-                "use_tls BOOLEAN NOT NULL DEFAULT 1," +                             // TLS für Gmail immer aktiv
-                "days_before_reminder INTEGER NOT NULL DEFAULT 1," +                // Standarderinnerung 1 Tag vorher
-                "app_notification BOOLEAN NOT NULL DEFAULT 0," +                    // Standardmäßig keine App-Benachrichtigung
-                "email_notification BOOLEAN NOT NULL DEFAULT 0," +                  // Standardmäßig keine E-Mail-Benachrichtigung
-                "notification_email TEXT NOT NULL DEFAULT ''" +                    // Standard-Notification-E-Mail
+                "email_address_sender TEXT NOT NULL DEFAULT ''," +          // E-Mail-Adresse des Absenders
+                "days_before_reminder_app INTEGER NOT NULL DEFAULT 1," +    // Standarderinnerung App 1 Tag vorher
+                "app_notification BOOLEAN NOT NULL DEFAULT 1," +            // Standardmäßig App-Benachrichtigung
+                "email_notification BOOLEAN NOT NULL DEFAULT 0," +          // Standardmäßig keine E-Mail-Benachrichtigung
+                "notification_email TEXT NOT NULL DEFAULT ''," +            // Empfänger E-Mail-Adresse
+                "api_key TEXT NOT NULL DEFAULT ''," +                       // Verschlüsselter API-Schlüssel
+                "private_api_key TEXT NOT NULL DEFAULT ''" +                // Verschlüsselter privater API-Schlüssel
                 ");";
 
         try (Statement stmt = connection.createStatement()) {
@@ -125,7 +114,6 @@ public class SQLiteDB {
             stmt.execute(plantProfileTable);
             stmt.execute(careTaskTable);
             stmt.execute(careTaskHistoryTable);
-            stmt.execute(reminderTable);
             stmt.execute(knowledgeBaseTable);
             stmt.execute(photoLogTable);
             stmt.execute(settingsTable);
@@ -139,19 +127,16 @@ public class SQLiteDB {
     }
 
     private static void createDefaultEntriesSettings(Statement stmt) {
-        // Verwende das übergebene Statement anstatt eine neue Verbindung zu öffnen
         try {
-            // Überprüfen, ob bereits ein Eintrag in der Settings-Tabelle vorhanden ist (basierend auf der settings_id)
             String checkIfExistsSql = "SELECT settings_id FROM Settings WHERE settings_id = 1";
             ResultSet rs = stmt.executeQuery(checkIfExistsSql);
 
             if (!rs.next()) {
-                // Wenn noch kein Eintrag vorhanden ist, füge den Standarddatensatz ein
                 String insertDefaultSettings = "INSERT INTO Settings (" +
-                        "username, email_address, smtp_username, smtp_password, smtp_host, smtp_port, " +
-                        "use_tls, app_notification, email_notification" +
+                        "username, email_address_sender, notification_email, days_before_reminder_app, " +
+                        "app_notification, email_notification, api_key, private_api_key" +
                         ") VALUES (" +
-                        "'Pflanzenfreund', '', '', '', 'smtp.gmail.com', 587, 1, 0, 0" +
+                        "'Pflanzenfreund', '', '', 1, 1, 0, '', ''" +
                         ");";
 
                 stmt.executeUpdate(insertDefaultSettings);

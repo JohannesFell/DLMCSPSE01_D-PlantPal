@@ -61,6 +61,51 @@ public class CareTaskRepository {
 
         return tasks;
     }
+    /**
+     * Lädt alle Pflegeaufgaben, die vor oder am aktuellen Datum fällig sind.
+     *
+     * @param dueDate Das Datum, vor dem die Aufgaben fällig sind.
+     * @return Liste von PflanzenPflege_Model mit fälligen Aufgaben.
+     */
+    public List<PflanzenPflege_Model> loadTasksDueBefore(LocalDate dueDate) {
+        List<PflanzenPflege_Model> tasks = new ArrayList<>();
+        String sql = "SELECT CareTask.task_id, CareTask.task_type, CareTask.due_date, CareTask.completed, CareTask.note, " +
+                "PlantProfile.plant_id, PlantProfile.plant_name, PlantProfile.location, " +
+                "PlantProfile.watering_interval, PlantProfile.fertilizing_interval " +
+                "FROM CareTask " +
+                "LEFT JOIN PlantProfile ON CareTask.plant_id = PlantProfile.plant_id " +
+                "WHERE CareTask.due_date <= ? AND CareTask.completed = false";
+
+        try (Connection conn = SQLiteDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDate(1, java.sql.Date.valueOf(dueDate));
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                // Erstelle ein PflanzenPflege_Model mit allen erforderlichen Parametern
+                PflanzenPflege_Model task = new PflanzenPflege_Model(
+                        rs.getInt("task_id"),
+                        rs.getInt("plant_id"),
+                        rs.getString("task_type"),
+                        rs.getDate("due_date").toLocalDate(),
+                        rs.getBoolean("completed"),
+                        rs.getString("note"),
+                        rs.getString("plant_name"),
+                        rs.getString("location"),
+                        rs.getInt("watering_interval"),
+                        rs.getInt("fertilizing_interval"),
+                        "actions"
+                );
+                tasks.add(task);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tasks;
+    }
 
     /**
      * Markiert eine Pflegeaufgabe als erledigt und aktualisiert die entsprechenden Felder in der Datenbank.

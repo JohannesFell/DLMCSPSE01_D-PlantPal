@@ -12,14 +12,12 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0"
-            prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.EinstellungenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.EinstellungenController">
    <styleClass>
-      <String fx:value="inner_Screen"/>
-      <String fx:value="shadow"/>
+      <String fx:value="inner_Screen" />
+      <String fx:value="shadow" />
    </styleClass>
-   <Pane fx:id="pane_MailEinstellung" layoutX="35.0" layoutY="343.0" prefHeight="281.0" prefWidth="928.0"
+   <Pane fx:id="pane_MailEinstellung" layoutX="35.0" layoutY="343.0" prefHeight="121.0" prefWidth="928.0"
          styleClass="settings_pane" stylesheets="@Style.css">
       <Label layoutX="10.0" layoutY="30.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Empfänger:">
          <font>
@@ -32,90 +30,32 @@
             <Font name="Tahoma" size="14.0"/>
          </font>
       </TextField>
-      <Label layoutX="568.0" layoutY="30.0" styleClass="font_on_dark" stylesheets="@Style.css"
-             text="Versand E-Mail:">
+      <Label layoutX="533.0" layoutY="30.0" styleClass="font_on_dark" stylesheets="@Style.css" text="API-Schlüssel:">
          <font>
             <Font name="Tahoma" size="14.0"/>
          </font>
       </Label>
-      <TextField fx:id="txt_mail_sender" layoutX="681.0" layoutY="25.0" prefHeight="28.0" prefWidth="230.0"
-                 styleClass="formular_textFields" stylesheets="@Style.css">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </TextField>
-      <Label layoutX="568.0" layoutY="70.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Host:">
+      <Label layoutX="533.0" layoutY="70.0" styleClass="font_on_dark" stylesheets="@Style.css"
+             text="Privater API-Schlüssel:">
          <font>
             <Font name="Tahoma" size="14.0"/>
          </font>
       </Label>
-      <TextField fx:id="txt_host" editable="false" layoutX="681.0" layoutY="65.0" prefHeight="28.0" prefWidth="230.0"
-                 styleClass="formular_textFields" stylesheets="@Style.css">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </TextField>
-      <Label layoutX="568.0" layoutY="109.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Port:">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <TextField fx:id="txt_port" editable="false" layoutX="681.0" layoutY="104.0" prefHeight="28.0"
-                 prefWidth="230.0" styleClass="formular_textFields" stylesheets="@Style.css">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </TextField>
-      <Label layoutX="568.0" layoutY="148.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Benutzername:">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <TextField fx:id="txt_mail_username" layoutX="681.0" layoutY="143.0" prefHeight="28.0" prefWidth="230.0"
-                 styleClass="formular_textFields" stylesheets="@Style.css">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </TextField>
-      <Label layoutX="568.0" layoutY="188.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Passwort:">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <Label layoutX="568.0" layoutY="227.0" styleClass="font_on_dark" stylesheets="@Style.css" text="TLS / SSL:">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <TextField fx:id="txt_tsl_ssl" editable="false" layoutX="681.0" layoutY="222.0" prefHeight="28.0"
-                 prefWidth="230.0" styleClass="formular_textFields" stylesheets="@Style.css">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </TextField>
-      <Label layoutX="10.0" layoutY="70.0" styleClass="font_on_dark" stylesheets="@Style.css"
-             text="Benachrichtigung">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <ComboBox fx:id="cb_days_before_reminder" layoutX="123.0" layoutY="65.0" prefHeight="25.0" prefWidth="107.0"
-                stylesheets="@Style.css">
-         <styleClass>
-            <String fx:value="action_buttons"/>
-            <String fx:value="action_buttons"/>
-         </styleClass>
-         <cursor>
-            <Cursor fx:constant="HAND"/>
-         </cursor>
-      </ComboBox>
-      <Label layoutX="246.0" layoutY="71.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tag(e) vorher">
-         <font>
-            <Font name="Tahoma" size="14.0"/>
-         </font>
-      </Label>
-      <PasswordField fx:id="txt_mail_password" layoutX="681.0" layoutY="185.0" prefHeight="25.0" prefWidth="230.0"
+      <PasswordField fx:id="pw_api_key" layoutX="705.0" layoutY="27.0" prefHeight="25.0" prefWidth="209.0"
                      styleClass="formular_textFields" stylesheets="@Style.css"/>
+      <PasswordField fx:id="pw_private_api_key" layoutX="705.0" layoutY="67.0" prefHeight="25.0" prefWidth="209.0"
+                     styleClass="formular_textFields" stylesheets="@Style.css"/>
+      <Label layoutX="10.0" layoutY="70.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Absender:">
+         <font>
+            <Font name="Tahoma" size="14.0"/>
+         </font>
+      </Label>
+      <TextField fx:id="txt_mail_sender" layoutX="123.0" layoutY="65.0" prefHeight="25.0" prefWidth="209.0"
+                 styleClass="formular_textFields" stylesheets="@Style.css">
+         <font>
+            <Font name="Tahoma" size="14.0"/>
+         </font>
+      </TextField>
    </Pane>
    <Pane fx:id="pane_Benachrichtigung" layoutX="35.0" layoutY="177.0" prefHeight="101.0" prefWidth="928.0"
          styleClass="settings_pane" stylesheets="@Style.css">
@@ -133,6 +73,26 @@
       </Label>
       <CheckBox fx:id="chk_mail_notification" layoutX="188.0" layoutY="62.0" mnemonicParsing="false"/>
       <CheckBox fx:id="chk_app_notification" layoutX="188.0" layoutY="22.0" mnemonicParsing="false"/>
+      <Label layoutX="585.0" layoutY="21.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Benachrichtigung">
+         <font>
+            <Font name="Tahoma" size="14.0"/>
+         </font>
+      </Label>
+      <ComboBox fx:id="cb_days_before_reminder_app" layoutX="698.0" layoutY="16.0" prefHeight="25.0" prefWidth="107.0"
+                stylesheets="@Style.css">
+         <styleClass>
+            <String fx:value="action_buttons"/>
+            <String fx:value="action_buttons"/>
+         </styleClass>
+         <cursor>
+            <Cursor fx:constant="HAND"/>
+         </cursor>
+      </ComboBox>
+      <Label layoutX="821.0" layoutY="22.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tag(e) vorher">
+         <font>
+            <Font name="Tahoma" size="14.0"/>
+         </font>
+      </Label>
    </Pane>
    <Pane fx:id="pane_Benutzername" layoutX="35.0" layoutY="57.0" prefHeight="54.0" prefWidth="928.0"
          styleClass="settings_pane" stylesheets="@Style.css">
@@ -148,33 +108,36 @@
          </font>
       </TextField>
    </Pane>
-   <Button fx:id="btn_save" layoutX="880.0" layoutY="670.0" mnemonicParsing="false" onAction="#saveSettings"
-           stylesheets="@Style.css" text="Speichern">
+   <Button fx:id="btn_save" layoutX="880.0" layoutY="670.0" mnemonicParsing="false" onAction="#saveSettings" stylesheets="@Style.css" text="Speichern">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
       </font>
       <styleClass>
-         <String fx:value="action_buttons"/>
-         <String fx:value="action_buttons"/>
+         <String fx:value="action_buttons" />
+         <String fx:value="action_buttons" />
       </styleClass>
       <cursor>
-         <Cursor fx:constant="HAND"/>
+         <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Label layoutX="35.0" layoutY="152.0" styleClass="font_on_dark" stylesheets="@Style.css"
-          text="Benachrichtigungs-Einstellungen">
+   <Label layoutX="35.0" layoutY="152.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Benachrichtigungs-Einstellungen">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="35.0" layoutY="318.0" styleClass="font_on_dark" stylesheets="@Style.css" text="E-Mail-Einstellungen">
+   <Label layoutX="35.0" layoutY="318.0" styleClass="font_on_dark" stylesheets="@Style.css" text="E-Mail-Einstellungen (via Mailjet)">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
    <Label layoutX="35.0" layoutY="33.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Profil-Einstellungen">
       <font>
-         <Font name="Tahoma" size="14.0"/>
+         <Font name="Tahoma" size="14.0" />
+      </font>
+   </Label>
+   <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0" styleClass="notificationLabel" stylesheets="@Style.css" visible="false">
+      <font>
+         <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
 </AnchorPane>
