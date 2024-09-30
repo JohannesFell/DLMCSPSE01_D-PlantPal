@@ -4,5 +4,19 @@ body {
 }
 
 p {
+    font-family: Tahoma;
     font-size: 14px;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-family: 'Tahoma';
 }

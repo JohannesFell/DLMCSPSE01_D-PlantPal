@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="tilePane" prefHeight="300.0" prefWidth="300.0" styleClass="notification_Tile"
+            stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.plantpal.app.WissensdatenbankKachelController">
+   <ImageView fx:id="image" fitHeight="256.0" fitWidth="256.0" layoutX="22.0" layoutY="22.0" pickOnBounds="true"
+              preserveRatio="true"/>
+   <Label fx:id="lbl_name" alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="284.0" prefHeight="22.0"
+          prefWidth="292.0" styleClass="lbl_knowledgeDB" stylesheets="@../css/Style.css" text="Label"
+          AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0"
+          AnchorPane.topAnchor="282.0">
+      <font>
+         <Font name="Tahoma" size="14.0"/>
+      </font>
+   </Label>
+</AnchorPane>

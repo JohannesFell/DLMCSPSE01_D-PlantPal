@@ -1,0 +1,101 @@
+[
+  {
+    "knowledge_id": 1,
+    "name": "Blattläuse",
+    "identification": "<p>Blattläuse sind winzige, grüne, schwarze oder gelbe Insekten, die sich auf den Blättern und Trieben ansiedeln. Sie hinterlassen einen klebrigen Honigtau, der zu Rußpilzen führen kann. Befallene Pflanzen zeigen oft verkrüppelte oder gelbe Blätter.</p>",
+    "control": "<ul><li>Natürliche Feinde wie Marienkäfer einsetzen.</li><li>Betroffene Pflanzen mit einer Seifenlösung besprühen.</li><li>Bei starkem Befall spezielle Insektizide verwenden.</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/blattlaeuse/",
+    "imagePath": "images/wissensdatenbank/Blattläuse.jpg",
+    "imageAuthor": "Bild von Andrey Tikhonovskiy auf Unsplash"
+  },
+  {
+    "knowledge_id": 2,
+    "name": "Echter Mehltau",
+    "identification": "Echter Mehltau ist an einem mehlig-weißen Belag auf den Blättern erkennbar, der später braun wird. Der Befall tritt meist auf der Blattoberseite auf, kann aber auch Blüten und Stängel befallen.",
+    "control": "<ul><li>Befallene Blätter und Triebe entfernen.</li><li>Schwefelhaltige Pflanzenschutzmittel verwenden.</li><li>Vorbeugung durch regelmäßige Stärkung mit biologischen Düngern.</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/echter-mehltau/",
+    "imagePath": "images/wissensdatenbank/EchterMehltau.jpg",
+    "imageAuthor": "Bild von Willfried Wende auf Pixabay"
+  },
+  {
+    "knowledge_id": 3,
+    "name": "Eisenmangel",
+    "identification": "Blätter vergilben, nur die Blattadern bleiben dunkelgrün. Besonders bei Rhododendron, Zitruspflanzen und Petunien sichtbar.",
+    "control": "<ul><li>pH-Wert des Bodens überprüfen und korrigieren</li><li>Eisen-Spezialdünger verwenden</li><li>Urgesteinsmehl einarbeiten</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/eisenmangel/",
+    "imagePath": "images/wissensdatenbank/Eisenmangel.jpg",
+    "imageAuthor": "Bild von Ar rouz, CC BY-SA 4.0, via Wikimedia Commons"
+  },
+  {
+    "knowledge_id": 4,
+    "name": "Kaliummangel",
+    "identification": "Blätter zeigen gelbe Flecken, die Ränder verbräunen.",
+    "control": "<ul><li>Kali-Dünger anwenden</li><li>pH-Wert des Bodens anpassen</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/kaliummangel/",
+    "imagePath": "images/wissensdatenbank/Kaliummangel.jpg",
+    "imageAuthor": "Bild von Scot Nelson auf flickr.com"
+  },
+  {
+    "knowledge_id": 5,
+    "name": "Korkflecken",
+    "identification": "Kleine, braune, korkige Erhebungen auf Blättern und Früchten.",
+    "control": "<ul><li>Feuchtigkeit regulieren</li><li>Belüftung verbessern</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/korkflecken/",
+    "imagePath": "images/wissensdatenbank/Korkflecken.jpg",
+    "imageAuthor": "Bruce Watt, University of Maine, Bugwood.org"
+  },
+  {
+    "knowledge_id": 6,
+    "name": "Honigtau",
+    "identification": "<ul><li>klebrige Ablagerung auf Blättern</li><li>stammt von pflanzensaugenden Tieren, die überschüssigen Zucker in Form von Ausscheidungen auf der Pflanze hinterlassen. Insekten wie Blattläuse, Schildläuse, Woll- und Schmierläuse sowie Weiße Fliegen sind dafür verantwortlich</li> ",
+    "control": "<ul><li>Befallene Pflanzenteile entfernen</li><li>Förderung von Nützlingen</li><li>Mit einem Wasserstrahl abwaschen</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/russtau-honigtau/",
+    "imagePath": "images/wissensdatenbank/Honigtau.jpg",
+    "imageAuthor": "Bild von Flora Press/Thomas Lohrer"
+  },
+  {
+    "knowledge_id": 7,
+    "name": "Spinnmilben",
+    "identification": "Feine Spinnweben und gelbe Flecken auf den Blättern.",
+    "control": "<ul><li>Pflanzen regelmäßig befeuchten</li><li>Neemöl anwenden</li><li>Nützlinge wie Raubmilben einsetzen</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/spinnmilben/",
+    "imagePath": "images/wissensdatenbank/Spinnmilben.jpg",
+    "imageAuthor": "Bild von Paramecium, CC BY-SA 3.0, via Wikimedia Commons"
+  },
+  {
+    "knowledge_id": 8,
+    "name": "Thripse",
+    "identification": "<ul><li>mikroskopisch kleine und längliche Insekten</li><li>meist quergesteift</li><li>Körperfarbe: geld oder schwarzbraun</li><li>Silbrige Flecken auf den Blättern, kleine schwarze Kotspuren</li></ul>",
+    "control": "<ul><li>Gelbtafeln verwenden</li><li>Regelmäßiges Abduschen der Pflanze</li><li>Einsatz von Nützlingen wie Raubmilben</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/thripse/",
+    "imagePath": "images/wissensdatenbank/Thripse.jpg",
+    "imageAuthor": "Bild von Tomasz Klejdysz / shutterstock.com"
+  },
+  {
+    "knowledge_id": 9,
+    "name": "Trauermücken",
+    "identification": "Schwarze, fliegende Insekten in der Nähe der Pflanze, Larven im Boden.",
+    "control": "<ul><li>Neemöl oder Nematoden gegen Larven</li><li>Gelbtafeln gegen erwachsene Fliegen</li><li>Gießverhalten anpassen</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/trauermuecken/",
+    "imagePath": "images/wissensdatenbank/Trauermücken.jpg",
+    "imageAuthor": "Bild von Maja Dumat - Creative Commons Licence BY 2.0"
+  },
+  {
+    "knowledge_id": 10,
+    "name": "Weiße Fliege",
+    "identification": "Weiße, kleine Fliegen an der Unterseite der Blätter.",
+    "control": "<ul><li>Gelbtafeln einsetzen</li><li>Neemöl oder Insektizide verwenden</li><li>Abspülen der Blätter mit Wasser</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/weisse-fliege/",
+    "imagePath": "images/wissensdatenbank/Weiße Fliege.jpg",
+    "imageAuthor": "Bild von picture-alliance/dpa"
+  },
+  {
+    "knowledge_id": 11,
+    "name": "Wurzelfäule",
+    "identification": "Verfärbte, matschige Wurzeln und welkende Blätter.",
+    "control": "<ul><li>Gut durchlässige Erde verwenden</li><li>Staunässe vermeiden</li><li>Wurzelbehandlung mit Fungiziden</li></ul>",
+    "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/wurzelfaeule/",
+    "imagePath": "images/wissensdatenbank/Wurzelfäule.jpg",
+    "imageAuthor": "Bild von Maja Dumat from Deutschland (Germany), CC BY 2.0, via Wikimedia Commons"
+  }
+]

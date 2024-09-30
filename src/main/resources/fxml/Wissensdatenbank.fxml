@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.WissensdatenbankController">
    <styleClass>
       <String fx:value="inner_Screen" />
       <String fx:value="shadow" />
    </styleClass>
+   <FontAwesomeIconView fill="#d2dbc8" glyphName="PAGELINES" layoutX="613.0" layoutY="723.0" opacity="0.4" rotate="9.5" size="600" />
+
+   <ScrollPane fx:id="scrollPane" layoutX="33.0" layoutY="35.0" prefHeight="647.0" prefWidth="931.0" styleClass="transparent-scroll-pane">
+      <!-- GridPane für dynamische Kacheln -->
+      <GridPane fx:id="gridPane" hgap="10.0" vgap="10.0">
+         <!-- Dynamische Kacheln werden hier eingefügt -->
+      </GridPane>
+   </ScrollPane>
+   <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0" styleClass="notificationLabel" stylesheets="@../css/Style.css" visible="false">
+      <font>
+         <Font name="Tahoma" size="14.0" />
+      </font>
+   </Label>
 </AnchorPane>
