@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.PflanzenProfileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.PflanzenProfileController">
    <styleClass>
       <String fx:value="inner_Screen" />
       <String fx:value="shadow" />
    </styleClass>
-   <AnchorPane prefHeight="408.0" prefWidth="997.0" styleClass="table" stylesheets="@Style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <TableView fx:id="pflanzenProfil_tableView" layoutX="11.0" layoutY="45.0" prefHeight="408.0" prefWidth="976.0" styleClass="table" stylesheets="@Style.css">
+   <AnchorPane prefHeight="408.0" prefWidth="997.0" styleClass="table" stylesheets="@../css/Style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="pflanzenProfil_tableView" layoutX="11.0" layoutY="45.0" prefHeight="408.0" prefWidth="976.0" styleClass="table" stylesheets="@../css/Style.css">
          <columns>
             <TableColumn fx:id="profile_name_col" prefWidth="133.0" text="Name" />
             <TableColumn fx:id="profile_bot_name_col" prefWidth="187.0" text="Name botanisch" />
@@ -32,7 +32,7 @@
             <TableColumn fx:id="profile_kaufdatum" prefWidth="129.0" text="Kaufdatum" />
          </columns>
       </TableView>
-      <TextField fx:id="search" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="178.0" promptText="Suche" stylesheets="@Style.css" AnchorPane.leftAnchor="14.0">
+      <TextField fx:id="search" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="178.0" promptText="Suche" stylesheets="@../css/Style.css" AnchorPane.leftAnchor="14.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -42,99 +42,99 @@
          </styleClass>
       </TextField>
       <FontAwesomeIconView glyphName="SEARCH" layoutX="22.0" layoutY="31.0" size="15" text="" />
-      <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0" styleClass="notificationLabel" stylesheets="@Style.css" visible="false">
+      <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0" styleClass="notificationLabel" stylesheets="@../css/Style.css" visible="false">
          <font>
             <Font name="Tahoma" size="14.0" />
          </font>
       </Label>
    </AnchorPane>
-   <Label layoutX="34.0" layoutY="473.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Name:">
+   <Label layoutX="34.0" layoutY="473.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Name:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="name" layoutX="149.0" layoutY="468.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="name" layoutX="149.0" layoutY="468.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="34.0" layoutY="524.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Name botanisch:">
+   <Label layoutX="34.0" layoutY="524.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Name botanisch:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="botanical_name" layoutX="149.0" layoutY="519.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="botanical_name" layoutX="149.0" layoutY="519.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="34.0" layoutY="577.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Standort:">
+   <Label layoutX="34.0" layoutY="577.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Standort:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="standort" layoutX="149.0" layoutY="572.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="standort" layoutX="149.0" layoutY="572.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="34.0" layoutY="632.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Kaufdatum:">
+   <Label layoutX="34.0" layoutY="632.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Kaufdatum:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="kaufdatum" layoutX="149.0" layoutY="627.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="kaufdatum" layoutX="149.0" layoutY="627.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="420.0" layoutY="476.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Letzes Gießen:">
+   <Label layoutX="420.0" layoutY="476.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Letzes Gießen:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="last_giessen" editable="false" layoutX="535.0" layoutY="471.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="last_giessen" editable="false" layoutX="535.0" layoutY="471.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="420.0" layoutY="527.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Letztes Düngen:">
+   <Label layoutX="420.0" layoutY="527.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Letztes Düngen:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="last_duengen" editable="false" layoutX="535.0" layoutY="522.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@Style.css">
+   <TextField fx:id="last_duengen" editable="false" layoutX="535.0" layoutY="522.0" prefHeight="25.0" prefWidth="209.0" styleClass="formular_textFields" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextField>
-   <Label layoutX="420.0" layoutY="580.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Intervall Gießen:">
+   <Label layoutX="420.0" layoutY="580.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Intervall Gießen:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="420.0" layoutY="635.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Intervall Düngen:">
+   <Label layoutX="420.0" layoutY="635.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Intervall Düngen:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <ComboBox fx:id="intervall_giessen" layoutX="535.0" layoutY="574.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
+   <ComboBox fx:id="intervall_giessen" layoutX="535.0" layoutY="574.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@../css/Style.css">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
    </ComboBox>
-   <ComboBox fx:id="intervall_duengen" layoutX="535.0" layoutY="628.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@Style.css">
+   <ComboBox fx:id="intervall_duengen" layoutX="535.0" layoutY="628.0" prefHeight="29.0" prefWidth="170.0" promptText="Wähle ein Intervall" styleClass="action_buttons" stylesheets="@../css/Style.css">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
    </ComboBox>
-   <AnchorPane layoutX="774.0" layoutY="466.0" prefHeight="200.0" prefWidth="192.0" stylesheets="@Style.css">
+   <AnchorPane layoutX="774.0" layoutY="466.0" prefHeight="200.0" prefWidth="192.0" stylesheets="@../css/Style.css">
       <styleClass>
          <String fx:value="shadow" />
          <String fx:value="inner_Screen" />
       </styleClass>
       <ImageView fx:id="image" fitHeight="202.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="image_import" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@Style.css" text="Import">
+      <Button fx:id="image_import" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Import">
          <font>
             <Font name="Tahoma" size="14.0" />
          </font>
@@ -146,7 +146,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="image_show" layoutX="98.0" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@Style.css" text="Show">
+      <Button fx:id="image_show" layoutX="98.0" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Show">
          <font>
             <Font name="Tahoma" size="14.0" />
          </font>
@@ -159,7 +159,7 @@
          </cursor>
       </Button>
    </AnchorPane>
-   <Button fx:id="btn_add" layoutX="879.0" layoutY="683.0" mnemonicParsing="false" onAction="#addPlant" stylesheets="@Style.css" text="Hinzufügen">
+   <Button fx:id="btn_add" layoutX="879.0" layoutY="683.0" mnemonicParsing="false" onAction="#addPlant" stylesheets="@../css/Style.css" text="Hinzufügen">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
@@ -171,7 +171,7 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Button fx:id="btn_update" layoutX="774.0" layoutY="683.0" mnemonicParsing="false" onAction="#updatePlantProfile" stylesheets="@Style.css" text="Aktualisieren">
+   <Button fx:id="btn_update" layoutX="774.0" layoutY="683.0" mnemonicParsing="false" onAction="#updatePlantProfile" stylesheets="@../css/Style.css" text="Aktualisieren">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
@@ -183,7 +183,7 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Button fx:id="btn_delete" layoutX="105.0" layoutY="683.0" mnemonicParsing="false" onAction="#deletePlant" stylesheets="@Style.css" text="Löschen">
+   <Button fx:id="btn_delete" layoutX="105.0" layoutY="683.0" mnemonicParsing="false" onAction="#deletePlant" stylesheets="@../css/Style.css" text="Löschen">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
@@ -195,7 +195,7 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Button fx:id="btn_clear" layoutX="34.0" layoutY="683.0" mnemonicParsing="false" onAction="#clearFormFields" stylesheets="@Style.css" text="Leeren">
+   <Button fx:id="btn_clear" layoutX="34.0" layoutY="683.0" mnemonicParsing="false" onAction="#clearFormFields" stylesheets="@../css/Style.css" text="Leeren">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
@@ -207,12 +207,12 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </Button>
-   <Label layoutX="712.0" layoutY="580.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tage">
+   <Label layoutX="712.0" layoutY="580.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Tage">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="712.0" layoutY="635.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Tage">
+   <Label layoutX="712.0" layoutY="635.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Tage">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>

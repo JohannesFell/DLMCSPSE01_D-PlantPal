@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root_mainscreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.NotizenEditorController">
-   <TextArea fx:id="noteTextArea" layoutX="16.0" layoutY="52.0" prefHeight="302.0" prefWidth="569.0" styleClass="noteTextArea" stylesheets="@Style.css">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root_mainscreen" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.NotizenEditorController">
+   <TextArea fx:id="noteTextArea" layoutX="16.0" layoutY="52.0" prefHeight="302.0" prefWidth="569.0" styleClass="noteTextArea" stylesheets="@../css/Style.css">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </TextArea>
-   <Button fx:id="saveButton" layoutX="259.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveNote" stylesheets="@Style.css" text="Speichern">
+   <Button fx:id="saveButton" layoutX="259.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveNote" stylesheets="@../css/Style.css" text="Speichern">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
@@ -35,7 +35,7 @@
          </ImageView>
       </graphic>
    </Label>
-   <Label layoutX="16.0" layoutY="13.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Notizen">
+   <Label layoutX="16.0" layoutY="13.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Notizen">
       <font>
          <Font size="18.0" />
       </font>

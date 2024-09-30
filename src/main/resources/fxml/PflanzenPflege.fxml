@@ -11,13 +11,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.PflanzenPflegeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="997.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.PflanzenPflegeController">
    <styleClass>
       <String fx:value="inner_Screen" />
       <String fx:value="shadow" />
    </styleClass>
-   <AnchorPane prefHeight="733.0" prefWidth="242.0" styleClass="column_anchorpane" stylesheets="@Style.css">
-      <ComboBox fx:id="filterPflanze" layoutX="12.0" layoutY="114.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle eine Pflanze" stylesheets="@Style.css" visibleRowCount="50">
+   <AnchorPane prefHeight="733.0" prefWidth="242.0" styleClass="column_anchorpane" stylesheets="@../css/Style.css">
+      <ComboBox fx:id="filterPflanze" layoutX="12.0" layoutY="114.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle eine Pflanze" stylesheets="@../css/Style.css" visibleRowCount="50">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -26,12 +26,12 @@
             <String fx:value="action_buttons" />
          </styleClass>
       </ComboBox>
-      <Label layoutX="14.0" layoutY="25.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Filter">
+      <Label layoutX="14.0" layoutY="25.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Filter">
          <font>
             <Font name="Tahoma Bold" size="16.0" />
          </font>
       </Label>
-      <ComboBox fx:id="filterStandort" layoutX="12.0" layoutY="193.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle einen Standort" stylesheets="@Style.css" visibleRowCount="50">
+      <ComboBox fx:id="filterStandort" layoutX="12.0" layoutY="193.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle einen Standort" stylesheets="@../css/Style.css" visibleRowCount="50">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -40,7 +40,7 @@
             <String fx:value="action_buttons" />
          </styleClass>
       </ComboBox>
-      <ComboBox fx:id="filterAktion" layoutX="12.0" layoutY="272.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle eine Aktion" stylesheets="@Style.css" visibleRowCount="50">
+      <ComboBox fx:id="filterAktion" layoutX="12.0" layoutY="272.0" prefHeight="32.0" prefWidth="218.0" promptText="Wähle eine Aktion" stylesheets="@../css/Style.css" visibleRowCount="50">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -50,25 +50,25 @@
          </styleClass>
       </ComboBox>
       <FontAwesomeIconView fx:id="filter_reload" fill="#d2dbc8" glyphName="REFRESH" layoutX="65.0" layoutY="41.0" size="17" />
-      <Label layoutX="14.0" layoutY="87.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Pflanzen">
+      <Label layoutX="14.0" layoutY="87.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Pflanzen">
          <font>
             <Font name="Tahoma Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="169.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Standort">
+      <Label layoutX="14.0" layoutY="169.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Standort">
          <font>
             <Font name="Tahoma Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="248.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Aktion">
+      <Label layoutX="14.0" layoutY="248.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Aktion">
          <font>
             <Font name="Tahoma Bold" size="14.0" />
          </font>
       </Label>
       <Line endX="114.0" layoutX="114.0" layoutY="52.0" startX="-100.0" stroke="#d2dbc8" />
    </AnchorPane>
-   <AnchorPane layoutX="255.0" layoutY="55.0" prefHeight="242.0" prefWidth="731.0" styleClass="table" stylesheets="@Style.css">
-      <TableView fx:id="current_tasks" layoutX="3.0" layoutY="4.0" prefHeight="242.0" prefWidth="722.0" styleClass="table" stylesheets="@Style.css">
+   <AnchorPane layoutX="255.0" layoutY="55.0" prefHeight="242.0" prefWidth="731.0" styleClass="table" stylesheets="@../css/Style.css">
+      <TableView fx:id="current_tasks" layoutX="3.0" layoutY="4.0" prefHeight="242.0" prefWidth="722.0" styleClass="table" stylesheets="@../css/Style.css">
          <columns>
             <TableColumn fx:id="pflege_name_col" prefWidth="155.0" text="Pflanze" />
             <TableColumn fx:id="pflege_standort_col" prefWidth="149.0" text="Standort" />
@@ -78,8 +78,8 @@
          </columns>
       </TableView>
    </AnchorPane>
-   <AnchorPane layoutX="255.0" layoutY="333.0" prefHeight="392.0" prefWidth="731.0" styleClass="table" stylesheets="@Style.css">
-      <TableView fx:id="history" layoutX="5.0" layoutY="4.0" prefHeight="382.0" prefWidth="722.0" styleClass="table" stylesheets="@Style.css">
+   <AnchorPane layoutX="255.0" layoutY="333.0" prefHeight="392.0" prefWidth="731.0" styleClass="table" stylesheets="@../css/Style.css">
+      <TableView fx:id="history" layoutX="5.0" layoutY="4.0" prefHeight="382.0" prefWidth="722.0" styleClass="table" stylesheets="@../css/Style.css">
          <columns>
             <TableColumn fx:id="pflege_hist_name_col" prefWidth="161.0" text="Pflanze" />
             <TableColumn fx:id="pflege_hist_aktion_col" prefWidth="202.0" text="Aktion" />
@@ -88,12 +88,12 @@
          </columns>
       </TableView>
    </AnchorPane>
-   <Label layoutX="255.0" layoutY="23.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Anstehende Pflegeaufgaben">
+   <Label layoutX="255.0" layoutY="23.0" prefHeight="18.0" prefWidth="231.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Anstehende Pflegeaufgaben">
       <font>
          <Font name="Tahoma Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="255.0" layoutY="308.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@Style.css" text="Historie">
+   <Label layoutX="255.0" layoutY="308.0" prefHeight="18.0" prefWidth="66.0" styleClass="font_on_dark" stylesheets="@../css/Style.css" text="Historie">
       <font>
          <Font name="Tahoma Bold" size="14.0" />
       </font>

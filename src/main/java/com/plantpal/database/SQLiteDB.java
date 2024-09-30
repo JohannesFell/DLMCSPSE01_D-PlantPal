@@ -81,14 +81,6 @@ public class SQLiteDB {
                 "FOREIGN KEY(plant_id) REFERENCES PlantProfile(plant_id)" +
                 ");";
 
-        String knowledgeBaseTable = "CREATE TABLE IF NOT EXISTS KnowledgeBase (" +
-                "knowledge_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name TEXT NOT NULL, " +
-                "identification TEXT NOT NULL, " +
-                "control TEXT NOT NULL," +
-                "additional_info TEXT" +
-                ");";
-
         String photoLogTable = "CREATE TABLE IF NOT EXISTS PhotoLog (" +
                 "photo_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "plant_id INTEGER," +
@@ -114,7 +106,6 @@ public class SQLiteDB {
             stmt.execute(plantProfileTable);
             stmt.execute(careTaskTable);
             stmt.execute(careTaskHistoryTable);
-            stmt.execute(knowledgeBaseTable);
             stmt.execute(photoLogTable);
             stmt.execute(settingsTable);
             System.out.println("All tables have been created successfully.");

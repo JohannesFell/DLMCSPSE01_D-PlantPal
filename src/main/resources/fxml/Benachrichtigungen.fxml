@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0"
-            prefWidth="997.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22"
+            prefWidth="997.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.plantpal.app.BenachrichtigungsController">
    <styleClass>
       <String fx:value="inner_Screen"/>
@@ -19,7 +19,7 @@
    <FontAwesomeIconView fill="#d2dbc8" glyphName="PAGELINES" layoutX="613.0" layoutY="723.0" opacity="0.4" rotate="9.5"
                         size="600"/>
    <Button fx:id="btn_snd_mail" layoutX="781.0" layoutY="690.0" mnemonicParsing="false"
-           onAction="#sendEmailNotification" stylesheets="@Style.css" text="E-Mail-Benachrichtigung senden">
+           onAction="#sendEmailNotification" stylesheets="@../css/Style.css" text="E-Mail-Benachrichtigung senden">
       <styleClass>
          <String fx:value="action_buttons"/>
          <String fx:value="action_buttons"/>
@@ -35,7 +35,7 @@
       </GridPane>
    </ScrollPane>
    <Label fx:id="notificationLabel" alignment="CENTER" layoutX="289.0" prefHeight="69.0" prefWidth="420.0"
-          styleClass="notificationLabel" stylesheets="@Style.css" visible="false">
+          styleClass="notificationLabel" stylesheets="@../css/Style.css" visible="false">
       <font>
          <Font name="Tahoma" size="14.0"/>
       </font>
