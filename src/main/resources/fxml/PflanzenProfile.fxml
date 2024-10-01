@@ -134,7 +134,7 @@
          <String fx:value="inner_Screen" />
       </styleClass>
       <ImageView fx:id="image" fitHeight="202.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="image_import" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Import">
+      <Button fx:id="image_import" layoutY="172.0" mnemonicParsing="false" onAction="#handleImageImport" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Import">
          <font>
             <Font name="Tahoma" size="14.0" />
          </font>

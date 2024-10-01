@@ -1,6 +1,7 @@
 package com.plantpal.app;
 
 import com.plantpal.database.CareTaskHistoryRepository;
+import com.plantpal.database.PhotoLogRepository;
 import com.plantpal.database.PlantProfileRepository;
 import com.plantpal.logic.PflanzenProfileService;
 import com.plantpal.model.PflanzenProfile_Model;
@@ -14,9 +15,20 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -58,6 +70,12 @@ public class PflanzenProfileController implements Initializable {
     @FXML
     private TableColumn<PflanzenProfile_Model, String> profile_kaufdatum, profile_last_duengen_col,
             profile_last_giessen_col;
+
+    @FXML
+    private ImageView image;
+
+    @FXML
+    private Button image_import;
 
     private ObservableList<PflanzenProfile_Model> plantData;
     private FilteredList<PflanzenProfile_Model> filteredData;
@@ -102,6 +120,7 @@ public class PflanzenProfileController implements Initializable {
         pflanzenProfil_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 populateFormFields(newSelection);
+                showLatestImage();
             }
         });
 
@@ -306,4 +325,85 @@ public class PflanzenProfileController implements Initializable {
             });
         }
     }
+
+    /**
+     * Diese Methode öffnet einen FileChooser, mit dem der Benutzer ein Bild hochladen kann.
+     * Das ausgewählte Bild wird in den Ressourcenordner der Anwendung kopiert
+     * und in der ImageView angezeigt.
+     */
+    @FXML
+    private void handleImageImport() {
+        // Konfiguration des FileChoosers für Bilddateien
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Bilddateien", "*.png", "*.jpg", "*.jpeg"));
+
+        // Öffnen des Dialogs zur Dateiauswahl
+        File selectedFile = fileChooser.showOpenDialog(image_import.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                // Zielordner im Ressourcenverzeichnis
+                Path destinationDir = Path.of("src/main/resources/images/uploads/");
+                if (!Files.exists(destinationDir)) {
+                    Files.createDirectories(destinationDir);  // Verzeichnisse erstellen, falls sie nicht existieren
+                }
+
+                // Verwende die Methode aus DateUtils, um den neuen Dateinamen mit Zeitstempel zu generieren
+                String newFileName = DateUtils.appendTimestampToFileName(selectedFile.getName());
+
+                // Zielpfad der Bilddatei
+                Path destinationFile = destinationDir.resolve(newFileName);
+
+                // Kopieren der ausgewählten Datei in den Ressourcenordner
+                Files.copy(selectedFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+
+                // Bildpfad in die Datenbank speichern
+                PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
+                PhotoLogRepository photoLogRepository = new PhotoLogRepository();
+                photoLogRepository.savePhoto(selectedPlant.getPlant_id(), destinationFile.toString(), LocalDateTime.now());
+
+                // Nach erfolgreichem Upload das neueste Bild anzeigen
+                NotificationUtils.showNotification(notificationLabel, "Bild erfolgreich hinzugefügt!");
+                showLatestImage();
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Ermittelt das letzte hochgeladene Bild aus der DB und zeigt es in der ImageView an.
+     */
+    @FXML
+    private void showLatestImage() {
+        PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedPlant != null) {
+            PhotoLogRepository photoLogRepository = new PhotoLogRepository();
+            String latestPhotoPath = photoLogRepository.getLatestPhotoPath(selectedPlant.getPlant_id());
+
+            if (latestPhotoPath != null) {
+                File file = new File(latestPhotoPath);
+                if (file.exists()) {
+                    Image img = new Image(file.toURI().toString());
+                    image.setImage(img);  // Zeige das Bild im ImageView an
+                } else {
+                    System.out.println("Bild existiert nicht auf dem angegebenen Pfad: " + latestPhotoPath);
+                    setDefaultImage();  // Falls das Bild nicht existiert, setze das Default-Bild
+                }
+            } else {
+                setDefaultImage();
+            }
+        }
+    }
+
+    /**
+     * Setzt das Standardbild, wenn kein Bild vorhanden ist.
+     */
+    private void setDefaultImage() {
+        Image defaultImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/default_plant.png")));
+        image.setImage(defaultImg);
+    }
+
+
 }

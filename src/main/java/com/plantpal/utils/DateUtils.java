@@ -3,6 +3,7 @@ package com.plantpal.utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -45,5 +46,21 @@ public class DateUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Methode, um einen Zeitstempel zu generieren und an einen Dateinamen anzuhängen
+     *
+     * @param fileName Dateiname
+     * @return Den formatierten Dateinamen mit TimeStamp als suffix.
+     */
+    public static String appendTimestampToFileName(String fileName) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+        String timestamp = LocalDateTime.now().format(formatter);
+
+        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+        String baseName = fileName.substring(0, fileName.lastIndexOf("."));
+
+        return baseName + "_" + timestamp + fileExtension;
     }
 }
