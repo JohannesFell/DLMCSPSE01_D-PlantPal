@@ -69,7 +69,7 @@ public class PlantPalApp extends Application {
             primaryStage.show();
 
             // Öffne die Datenbank und erstelle die Tabellen
-            SQLiteDB.getConnection();
+            SQLiteDB.createTables();  // Stelle sicher, dass die Tabellen nur einmalig erstellt werden
 
             // Überprüfe die Benachrichtigungen beim Start
             checkNotifications();
@@ -126,5 +126,8 @@ public class PlantPalApp extends Application {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
+
+        // Connection Pool schließen, wenn die Anwendung beendet wird
+        SQLiteDB.close();
     }
 }

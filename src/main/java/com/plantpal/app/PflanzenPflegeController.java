@@ -315,6 +315,4 @@ public class PflanzenPflegeController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
 }

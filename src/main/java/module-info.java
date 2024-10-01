@@ -18,6 +18,9 @@ module com.plantpal.PlantPal {
     requires org.json;
     requires com.google.gson;
     requires java.desktop;
+    requires com.zaxxer.hikari;
+    requires org.slf4j;
+    requires org.slf4j.simple;
 
     opens com.plantpal.app to javafx.fxml;
     exports com.plantpal.app;

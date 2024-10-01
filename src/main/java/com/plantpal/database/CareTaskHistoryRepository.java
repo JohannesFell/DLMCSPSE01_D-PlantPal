@@ -29,7 +29,7 @@ public class CareTaskHistoryRepository {
      * @param newValue       Der neue Wert.
      * @param completionDate Das Datum, an dem die Änderung vorgenommen wurde.
      */
-    public void insertIntoHistoryWithNote(int plantId, int taskId, String taskType, String oldValue, String newValue, LocalDate completionDate) throws SQLException {
+    public synchronized void insertIntoHistoryWithNote(int plantId, int taskId, String taskType, String oldValue, String newValue, LocalDate completionDate) throws SQLException {
         // Wenn der alte und neue Wert gleich sind, wird keine Historie geschrieben.
         if (oldValue.equals(newValue)) {
             return;
@@ -58,7 +58,7 @@ public class CareTaskHistoryRepository {
      *
      * @return Eine Liste von `PflanzenPflegeHistory_Model` mit allen Historieneinträgen.
      */
-    public List<PflanzenPflegeHistory_Model> loadHistory() {
+    public synchronized List<PflanzenPflegeHistory_Model> loadHistory() {
         List<PflanzenPflegeHistory_Model> historyList = new ArrayList<>();
         String sql = "SELECT CareTaskHistory.history_id, CareTaskHistory.task_id, CareTaskHistory.plant_id, CareTaskHistory.task_type, " +
                 "CareTaskHistory.completion_date, CareTaskHistory.note, " +
@@ -188,7 +188,7 @@ public class CareTaskHistoryRepository {
      * @param note      Die aktualisierte Notiz.
      * @throws SQLException Wenn ein Fehler bei der Datenbankoperation auftritt.
      */
-    public void updateNoteInDatabase(int historyId, String note) throws SQLException {
+    public synchronized void updateNoteInDatabase(int historyId, String note) throws SQLException {
         String sql = "UPDATE CareTaskHistory SET note = ? WHERE history_id = ?";
 
         try (Connection conn = SQLiteDB.getConnection();

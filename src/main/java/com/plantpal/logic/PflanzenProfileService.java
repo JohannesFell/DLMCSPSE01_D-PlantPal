@@ -2,8 +2,10 @@ package com.plantpal.logic;
 
 import com.plantpal.database.CareTaskHistoryRepository;
 import com.plantpal.database.PlantProfileRepository;
+import com.plantpal.database.SQLiteDB;
 import com.plantpal.model.PflanzenProfile_Model;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -62,57 +64,68 @@ public class PflanzenProfileService {
      * @param updatedPlant Das aktualisierte Pflanzenprofil.
      */
     public void updatePlantProfile(PflanzenProfile_Model updatedPlant) throws SQLException {
-        // Hole die aktuellen Daten aus der Datenbank
-        PflanzenProfile_Model currentPlant = plantProfileRepository.getPlantProfileById(updatedPlant.getPlant_id());
+        // Verwende try-with-resources für die Verbindung, um sicherzustellen, dass sie ordnungsgemäß geschlossen wird
+        try (Connection conn = SQLiteDB.getConnection()) {
+            conn.setAutoCommit(false);  // Transaktion beginnen
 
-        if (currentPlant != null) {
-            // Überprüfe Änderungen und schreibe Historie mit alter und neuer Wert-Notiz
-            if (!currentPlant.getPlant_name().equals(updatedPlant.getPlant_name())) {
-                careTaskHistoryRepository.insertIntoHistoryWithNote(
-                        updatedPlant.getPlant_id(),
-                        1001, // taskId für "Name geändert"
-                        "Name geändert",
-                        currentPlant.getPlant_name(),
-                        updatedPlant.getPlant_name(),
-                        LocalDate.now()
-                );
+            // Hole die aktuellen Daten aus der Datenbank
+            PflanzenProfile_Model currentPlant = plantProfileRepository.getPlantProfileById(updatedPlant.getPlant_id());
+
+            if (currentPlant != null) {
+                // Überprüfe Änderungen und schreibe Historie mit alter und neuer Wert-Notiz
+                if (!currentPlant.getPlant_name().equals(updatedPlant.getPlant_name())) {
+                    careTaskHistoryRepository.insertIntoHistoryWithNote(
+                            updatedPlant.getPlant_id(),
+                            1001, // taskId für "Name geändert"
+                            "Name geändert",
+                            currentPlant.getPlant_name(),
+                            updatedPlant.getPlant_name(),
+                            LocalDate.now()
+                    );
+                }
+
+                if (!currentPlant.getLocation().equals(updatedPlant.getLocation())) {
+                    careTaskHistoryRepository.insertIntoHistoryWithNote(
+                            updatedPlant.getPlant_id(),
+                            1002, // taskId für "Standort geändert"
+                            "Standort geändert",
+                            currentPlant.getLocation(),
+                            updatedPlant.getLocation(),
+                            LocalDate.now()
+                    );
+                }
+
+                if (currentPlant.getWatering_interval() != updatedPlant.getWatering_interval()) {
+                    careTaskHistoryRepository.insertIntoHistoryWithNote(
+                            updatedPlant.getPlant_id(),
+                            1003, // taskId für "Gießintervall geändert"
+                            "Gießintervall geändert",
+                            String.valueOf(currentPlant.getWatering_interval()),
+                            String.valueOf(updatedPlant.getWatering_interval()),
+                            LocalDate.now()
+                    );
+                }
+
+                if (currentPlant.getFertilizing_interval() != updatedPlant.getFertilizing_interval()) {
+                    careTaskHistoryRepository.insertIntoHistoryWithNote(
+                            updatedPlant.getPlant_id(),
+                            1004, // taskId für "Düngeintervall geändert"
+                            "Düngeintervall geändert",
+                            String.valueOf(currentPlant.getFertilizing_interval()),
+                            String.valueOf(updatedPlant.getFertilizing_interval()),
+                            LocalDate.now()
+                    );
+                }
+
+                // Aktualisiere das Pflanzenprofil in der Datenbank
+                plantProfileRepository.updatePlantProfile(updatedPlant);
+
+                // Transaktion erfolgreich, Commit durchführen
+                conn.commit();
             }
-
-            if (!currentPlant.getLocation().equals(updatedPlant.getLocation())) {
-                careTaskHistoryRepository.insertIntoHistoryWithNote(
-                        updatedPlant.getPlant_id(),
-                        1002, // taskId für "Standort geändert"
-                        "Standort geändert",
-                        currentPlant.getLocation(),
-                        updatedPlant.getLocation(),
-                        LocalDate.now()
-                );
-            }
-
-            if (currentPlant.getWatering_interval() != updatedPlant.getWatering_interval()) {
-                careTaskHistoryRepository.insertIntoHistoryWithNote(
-                        updatedPlant.getPlant_id(),
-                        1003, // taskId für "Gießintervall geändert"
-                        "Gießintervall geändert",
-                        String.valueOf(currentPlant.getWatering_interval()),
-                        String.valueOf(updatedPlant.getWatering_interval()),
-                        LocalDate.now()
-                );
-            }
-
-            if (currentPlant.getFertilizing_interval() != updatedPlant.getFertilizing_interval()) {
-                careTaskHistoryRepository.insertIntoHistoryWithNote(
-                        updatedPlant.getPlant_id(),
-                        1004, // taskId für "Düngeintervall geändert"
-                        "Düngeintervall geändert",
-                        String.valueOf(currentPlant.getFertilizing_interval()),
-                        String.valueOf(updatedPlant.getFertilizing_interval()),
-                        LocalDate.now()
-                );
-            }
-
-            // Aktualisiere das Pflanzenprofil in der Datenbank
-            plantProfileRepository.updatePlantProfile(updatedPlant);
+        } catch (SQLException e) {
+            // Falls eine Ausnahme auftritt, wird hier die Transaktion zurückgesetzt
+            throw new SQLException("Fehler beim Aktualisieren des Pflanzenprofils: " + e.getMessage(), e);
         }
     }
 

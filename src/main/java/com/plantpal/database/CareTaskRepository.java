@@ -1,6 +1,7 @@
 package com.plantpal.database;
 
 import com.plantpal.model.PflanzenPflege_Model;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class CareTaskRepository {
 
         return tasks;
     }
+
     /**
      * Lädt alle Pflegeaufgaben, die vor oder am aktuellen Datum fällig sind.
      *
@@ -116,7 +118,7 @@ public class CareTaskRepository {
      * @param note Eine optionale Notiz zur Aufgabe.
      * @param completionDate Das Datum, an dem die Aufgabe abgeschlossen wurde.
      */
-    public void markTaskAsCompleted(int taskId, int plantId, String taskType, String note, LocalDate completionDate) {
+    public synchronized void markTaskAsCompleted(int taskId, int plantId, String taskType, String note, LocalDate completionDate) {
         String updateTaskSql = "UPDATE CareTask SET completed = true WHERE task_id = ?";
         String updatePlantProfileSql = null;
 
@@ -220,7 +222,6 @@ public class CareTaskRepository {
 
         return tasks;
     }
-
     /**
      * Ruft eine Liste von einzigartigen Aufgabentypen aus der Datenbank ab und fügt manuell definierte
      * Aufgabentypen hinzu. Die Liste wird entsprechend einer festgelegten Reihenfolge sortiert.

@@ -7,6 +7,7 @@ import com.plantpal.model.PflanzenPflegeHistory_Model;
 import com.plantpal.model.PflanzenPflege_Model;
 import com.plantpal.model.PflanzenProfile_Model;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -78,7 +79,7 @@ public class PflegeAufgabenService {
      * @param note        Eine Notiz zur Aufgabe.
      * @param completionDate Das Abschlussdatum.
      */
-    public void markTaskAsCompleted(int taskId, int plantId, String taskType, String note, LocalDate completionDate) {
+    public synchronized void markTaskAsCompleted(int taskId, int plantId, String taskType, String note, LocalDate completionDate) {
         careTaskRepository.markTaskAsCompleted(taskId, plantId, taskType, note, completionDate);
     }
 
@@ -87,7 +88,7 @@ public class PflegeAufgabenService {
      *
      * @throws SQLException wenn ein Fehler beim Zugriff auf die Datenbank auftritt.
      */
-    public void updateAllCareTasks() throws SQLException {
+    public synchronized void updateAllCareTasks() throws SQLException {
         List<PflanzenProfile_Model> plantProfiles = plantProfileRepository.getAllPlantProfiles();
 
         for (PflanzenProfile_Model plantProfile : plantProfiles) {

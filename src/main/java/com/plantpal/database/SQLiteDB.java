@@ -1,52 +1,104 @@
 package com.plantpal.database;
 
-import java.sql.*;
-import java.util.logging.Logger;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * Die Klasse {@code SQLiteDB} bietet eine zentrale Verwaltung für den Datenbankzugriff auf eine SQLite-Datenbank.
- * Sie stellt eine Methode zur Verfügung, um eine Verbindung zur SQLite-Datenbank herzustellen und zu verwalten.
- *
- * Diese Klasse implementiert das Singleton-Designmuster, um sicherzustellen, dass immer nur eine Instanz der
- * Datenbankverbindung existiert. Sie wird in der gesamten Anwendung genutzt, um auf die Datenbank zuzugreifen.
- *
- * Die Verbindung wird für alle Lese- und Schreiboperationen in der Datenbank verwendet, die von verschiedenen
- * Repositories aufgerufen werden. Diese Repositories nutzen die von dieser Klasse bereitgestellte Verbindung, um
- * SQL-Abfragen und Updates durchzuführen.
+ * Die Klasse {@code SQLiteDB} ist für die Verwaltung der SQLite-Datenbankverbindungen zuständig.
+ * Sie verwendet HikariCP für das Connection Pooling und aktiviert den WAL-Modus
+ * (Write-Ahead Logging) zur Verbesserung der Performance bei parallelen Lese- und Schreiboperationen.
+ * Sie stellt auch Methoden zur Erstellung von Tabellen und Standardeinträgen zur Verfügung.
  */
 public class SQLiteDB {
 
-    private static final String URL = "jdbc:sqlite:plantpal.db";
-    private static Connection connection = null;
-    private static final Logger logger = Logger.getLogger(SQLiteDB.class.getName());
+    private static HikariDataSource dataSource;
 
-    public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                connection = DriverManager.getConnection(URL);
-                logger.info("Connected to database");
-                createTables();  // Tabellen erstellen
-            } catch (SQLException e) {
-                logger.info("Connection to SQLite has failed.");
-                logger.info(e.toString());
-            }
-        }
-        return connection;
-    }
+    static {
+        // HikariCP Konfiguration
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:sqlite:plantpal.db");  // Pfad zur SQLite-Datenbank
+        config.setMaximumPoolSize(5);  // Maximal 5 Verbindungen
+        config.setConnectionTimeout(30000);  // Timeout in Millisekunden
+        config.setIdleTimeout(600000);  // Idle-Verbindungen werden nach 10 Minuten geschlossen
+        config.setMaxLifetime(1800000);  // Verbindungen werden nach 30 Minuten neu erstellt
+        config.setLeakDetectionThreshold(2000);  // Leak detection: 2 Sekunden
 
-    public void closeConnection() {
+        dataSource = new HikariDataSource(config);
+
+        // Datenbankverbindung öffnen und PRAGMA-Befehle ausführen
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
-            if (connection != null) {
-                logger.info("Connection closed");
-                connection.close();
+            conn = getConnection();
+            stmt = conn.createStatement();
+
+            // WAL-Modus aktivieren
+            stmt.execute("PRAGMA journal_mode=WAL;");
+
+            // Überprüfen, ob der WAL-Modus erfolgreich aktiviert wurde
+            rs = stmt.executeQuery("PRAGMA journal_mode;");
+            if (rs.next()) {
+                System.out.println("Journal Mode: " + rs.getString(1));  // Sollte 'wal' ausgeben
             }
         } catch (SQLException e) {
-            logger.info(e.toString());
+            e.printStackTrace();
+        } finally {
+            // Schließe Ressourcen korrekt
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    private static void createTables() {
 
+    /**
+     * Gibt eine Datenbankverbindung aus dem HikariCP-Pool zurück.
+     *
+     * @return eine {@code Connection} zur SQLite-Datenbank
+     * @throws SQLException wenn keine Verbindung hergestellt werden kann
+     */
+    public static Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
+    /**
+     * Schließt den HikariDataSource-Pool beim Beenden der Anwendung.
+     */
+    public static void close() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
+    }
+
+    /**
+     * Erstellt die benötigten Tabellen, falls sie nicht bereits existieren.
+     * Diese Methode wird einmalig beim Start der Anwendung aufgerufen.
+     */
+    public static void createTables() {
         String plantProfileTable = "CREATE TABLE IF NOT EXISTS PlantProfile (" +
                 "plant_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "plant_name TEXT NOT NULL," +
@@ -101,26 +153,53 @@ public class SQLiteDB {
                 "private_api_key TEXT NOT NULL DEFAULT ''" +                // Verschlüsselter privater API-Schlüssel
                 ");";
 
-        try (Statement stmt = connection.createStatement()) {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.createStatement();
             // Erstellen der Tabellen
             stmt.execute(plantProfileTable);
             stmt.execute(careTaskTable);
             stmt.execute(careTaskHistoryTable);
             stmt.execute(photoLogTable);
             stmt.execute(settingsTable);
-            System.out.println("All tables have been created successfully.");
-            createDefaultEntriesSettings(stmt);  // Übergebe das bereits existierende Statement
-            System.out.println("All entries have been inserted successfully.");
-        } catch (Exception e) {
-            System.out.println("Failed to create tables.");
+            System.out.println("Alle Tabellen wurden erfolgreich erstellt.");
+
+            // Erstellen von Standardeinträgen in der Settings-Tabelle
+            createDefaultEntriesSettings(stmt);
+            System.out.println("Standardeinträge wurden erfolgreich eingefügt.");
+        } catch (SQLException e) {
+            System.out.println("Fehler beim Erstellen der Tabellen.");
             e.printStackTrace();
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
+    /**
+     * Erstellt Standardeinträge in der Settings-Tabelle, falls noch keine existieren.
+     *
+     * @param stmt das Statement, das für die Datenbankabfragen verwendet wird
+     */
     private static void createDefaultEntriesSettings(Statement stmt) {
+        ResultSet rs = null;
         try {
             String checkIfExistsSql = "SELECT settings_id FROM Settings WHERE settings_id = 1";
-            ResultSet rs = stmt.executeQuery(checkIfExistsSql);
+            rs = stmt.executeQuery(checkIfExistsSql);
 
             if (!rs.next()) {
                 String insertDefaultSettings = "INSERT INTO Settings (" +
@@ -129,7 +208,6 @@ public class SQLiteDB {
                         ") VALUES (" +
                         "'Pflanzenfreund', '', '', 1, 1, 0, '', ''" +
                         ");";
-
                 stmt.executeUpdate(insertDefaultSettings);
                 System.out.println("Standarddatensatz in Settings eingefügt.");
             } else {
@@ -137,6 +215,14 @@ public class SQLiteDB {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

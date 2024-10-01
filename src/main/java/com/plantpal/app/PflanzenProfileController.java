@@ -111,9 +111,14 @@ public class PflanzenProfileController implements Initializable {
 
     /**
      * Lädt die Pflanzenprofildaten aus der Datenbank und aktualisiert die TableView.
+     * Der Datenbankzugriff ist synchronisiert, um parallele Zugriffe zu verhindern.
      */
-    private void loadPlantData() {
-        plantData.setAll(pflanzenProfileService.getAllPlantProfiles());
+    private synchronized void loadPlantData() {
+        try {
+            plantData.setAll(pflanzenProfileService.getAllPlantProfiles());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

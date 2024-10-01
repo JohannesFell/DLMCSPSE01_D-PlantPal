@@ -93,7 +93,7 @@ public class PlantProfileRepository {
      * Fügt ein neues Pflanzenprofil in die Datenbank ein.
      * @param plant Das Pflanzenprofil, das eingefügt werden soll.
      */
-    public void addPlantProfile(PflanzenProfile_Model plant) {
+    public synchronized void addPlantProfile(PflanzenProfile_Model plant) {
         String sql = "INSERT INTO PlantProfile (plant_name, botanical_plant_name, purchase_date, location, " +
                 "watering_interval, fertilizing_interval, last_watered, last_fertilized, image_path) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -123,7 +123,7 @@ public class PlantProfileRepository {
      *
      * @param plant Das Pflanzenprofil, das aktualisiert werden soll.
      */
-    public void updatePlantProfile(PflanzenProfile_Model plant) {
+    public synchronized void updatePlantProfile(PflanzenProfile_Model plant) {
         String sql = "UPDATE PlantProfile SET plant_name = ?, botanical_plant_name = ?, purchase_date = ?, location = ?, " +
                 "watering_interval = ?, fertilizing_interval = ?, last_watered = ?, last_fertilized = ?, image_path = ? " +
                 "WHERE plant_id = ?";
@@ -153,7 +153,7 @@ public class PlantProfileRepository {
      * Löscht ein Pflanzenprofil aus der Datenbank.
      * @param plantId Die ID des Pflanzenprofils, das gelöscht werden soll.
      */
-    public void deletePlantProfile(int plantId) {
+    public synchronized void deletePlantProfile(int plantId) {
         String sql = "DELETE FROM PlantProfile WHERE plant_id = ?";
 
         try (Connection conn = SQLiteDB.getConnection();

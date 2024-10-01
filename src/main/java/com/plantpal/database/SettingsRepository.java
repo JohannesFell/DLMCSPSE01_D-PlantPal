@@ -24,7 +24,7 @@ public class SettingsRepository {
     private SettingsRepository() {
     }
 
-    public static SettingsRepository getInstance() {
+    public static synchronized SettingsRepository getInstance() {
         if (instance == null) {
             instance = new SettingsRepository();
         }
@@ -66,7 +66,7 @@ public class SettingsRepository {
      *
      * @param settings Ein Einstellungen_Model, das die neuen Einstellungen enthält
      */
-    public void updateSettings(Einstellungen_Model settings) {
+    public synchronized void updateSettings(Einstellungen_Model settings) {
         String sql = "UPDATE Settings SET username = ?, email_address_sender = ?, app_notification = ?, " +
                 "email_notification = ?, days_before_reminder_app = ?, notification_email = ?, api_key = ?, private_api_key = ? WHERE settings_id = 1";
 
