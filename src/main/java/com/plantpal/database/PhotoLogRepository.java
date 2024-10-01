@@ -1,7 +1,11 @@
 package com.plantpal.database;
 
+import com.plantpal.model.PhotoLog_Model;
+
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoLogRepository {
 
@@ -37,6 +41,25 @@ public class PhotoLogRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<PhotoLog_Model> getPhotosForPlant(int plantId) {
+        String sql = "SELECT photo_path, date_taken FROM PhotoLog WHERE plant_id = ? ORDER BY date_taken";
+        List<PhotoLog_Model> photos = new ArrayList<>();
+
+        try (Connection conn = SQLiteDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, plantId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                PhotoLog_Model photoLog = new PhotoLog_Model(rs.getString("photo_path"), rs.getTimestamp("date_taken").toLocalDateTime());
+                photos.add(photoLog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return photos;
     }
 }
 

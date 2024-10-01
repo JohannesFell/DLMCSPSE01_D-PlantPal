@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0"
+            prefWidth="997.0" styleClass="root_mainscreen" stylesheets="@../css/Style.css"
+            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.plantpal.app.SlideshowController">
+   <ImageView fx:id="slideshowImage" fitHeight="609.0" fitWidth="806.0" layoutX="96.0" layoutY="62.0"
+              pickOnBounds="true" preserveRatio="true"/>
+   <ImageView fx:id="exit" fitHeight="22.0" fitWidth="22.0" layoutX="951.0" layoutY="21.0" pickOnBounds="true"
+              preserveRatio="true">
+      <cursor>
+         <Cursor fx:constant="HAND"/>
+      </cursor>
+      <Image url="@../images/close.png"/>
+   </ImageView>
+   <FontAwesomeIconView fx:id="arrow_right" fill="#d2dbc8" glyphName="ARROW_RIGHT" layoutX="941.0" layoutY="384.0"
+                        size="50">
+      <cursor>
+         <Cursor fx:constant="HAND"/>
+      </cursor>
+   </FontAwesomeIconView>
+   <FontAwesomeIconView fx:id="arrow_left" fill="#d2dbc8" glyphName="ARROW_LEFT" layoutX="14.0" layoutY="384.0"
+                        size="50">
+      <cursor>
+         <Cursor fx:constant="HAND"/>
+      </cursor>
+   </FontAwesomeIconView>
+   <Label fx:id="dateLabel" alignment="CENTER" layoutX="343.0" layoutY="683.0" prefHeight="17.0" prefWidth="312.0"
+          styleClass="formular_textFields" stylesheets="@../css/Style.css">
+      <font>
+         <Font name="Tahoma" size="14.0"/>
+      </font>
+   </Label>
+</AnchorPane>

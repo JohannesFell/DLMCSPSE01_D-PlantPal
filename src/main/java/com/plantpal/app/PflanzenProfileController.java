@@ -13,11 +13,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +34,10 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Controller für das Pflanzenprofil-Management.
@@ -81,16 +89,19 @@ public class PflanzenProfileController implements Initializable {
     private FilteredList<PflanzenProfile_Model> filteredData;
 
     private PflanzenProfileService pflanzenProfileService;
+    private PhotoLogRepository photoLogRepository;
 
     /**
      * Initialisiert den Controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialisiere den Service
+        // Initialisiere den Service und Repositories
         PlantProfileRepository plantProfileRepository = new PlantProfileRepository();
         CareTaskHistoryRepository careTaskHistoryRepository = new CareTaskHistoryRepository();
         pflanzenProfileService = new PflanzenProfileService(plantProfileRepository, careTaskHistoryRepository);
+        photoLogRepository = new PhotoLogRepository();
+
 
         // ComboBox für Gieß- und Düngeintervall mit Werten 1-31 initialisieren
         ObservableList<Integer> intervalValues = FXCollections.observableArrayList();
@@ -405,5 +416,54 @@ public class PflanzenProfileController implements Initializable {
         image.setImage(defaultImg);
     }
 
+    /**
+     * Öffnet die Bilderslideshow für die ausgewählte Pflanze.
+     */
+    @FXML
+    private void showImageSlideshow() {
+        PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
+        if (selectedPlant != null) {
+            try {
+                // Lade alle Fotos und Datumsangaben der Pflanze
+                List<Image> plantImages = photoLogRepository.getPhotosForPlant(selectedPlant.getPlant_id()).stream()
+                        .map(photo -> new Image("file:" + photo.getPhotoPath()))
+                        .collect(Collectors.toList());
 
+                List<String> photoDates = photoLogRepository.getPhotosForPlant(selectedPlant.getPlant_id()).stream()
+                        .map(photo -> photo.getDateTaken().toString())
+                        .collect(Collectors.toList());
+
+                // Lade das FXML für die Slideshow
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BilderSlideShow.fxml"));
+                Parent slideshowView = loader.load();
+
+                // Erstelle ein neues Fenster für die Slideshow
+                Stage stage = new Stage();
+                Scene scene = new Scene(slideshowView);
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initModality(Modality.APPLICATION_MODAL);
+
+                // Setze das aktuelle Fenster als Owner des neuen Fensters
+                Stage mainStage = (Stage) pflanzenProfil_tableView.getScene().getWindow();
+                stage.initOwner(mainStage);
+
+                // Ändere die Opacity des Hauptfensters, um es ausgegraut darzustellen
+                mainStage.getScene().getRoot().setOpacity(0.7);
+
+                // Initialisiere den SlideshowController mit den Bildern und Daten
+                SlideshowController controller = loader.getController();
+                controller.initializeSlideshow(plantImages, photoDates);
+
+                // Zeige das Slideshow-Fenster an
+                stage.showAndWait();
+
+                // Setze die Opacity des Hauptfensters nach dem Schließen des Detailfensters zurück
+                mainStage.getScene().getRoot().setOpacity(1.0);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

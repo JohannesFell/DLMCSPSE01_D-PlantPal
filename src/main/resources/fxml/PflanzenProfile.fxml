@@ -146,7 +146,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="image_show" layoutX="98.0" layoutY="172.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Show">
+      <Button fx:id="image_show" layoutX="98.0" layoutY="172.0" mnemonicParsing="false" onAction="#showImageSlideshow" prefHeight="28.0" prefWidth="95.0" stylesheets="@../css/Style.css" text="Show">
          <font>
             <Font name="Tahoma" size="14.0" />
          </font>

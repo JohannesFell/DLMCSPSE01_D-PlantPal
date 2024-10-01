@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class DateUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     /**
      * Formatiert ein LocalDate in einen String im "dd.MM.yyyy"-Format und gibt es als ObservableValue zurück.
@@ -62,5 +63,15 @@ public class DateUtils {
         String baseName = fileName.substring(0, fileName.lastIndexOf("."));
 
         return baseName + "_" + timestamp + fileExtension;
+    }
+
+    /**
+     * Formatiert einen LocalDateTime-Wert im Format "dd.MM.yyyy HH:mm:ss".
+     *
+     * @param dateTime Das zu formatierende LocalDateTime.
+     * @return Das formatierte Datum und die Uhrzeit als String.
+     */
+    public static String formatTimestamp(LocalDateTime dateTime) {
+        return (dateTime != null) ? dateTime.format(TIMESTAMP_FORMATTER) : "";
     }
 }
