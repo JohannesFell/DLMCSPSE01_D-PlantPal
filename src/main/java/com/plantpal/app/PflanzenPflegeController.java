@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -300,17 +301,30 @@ public class PflanzenPflegeController implements Initializable {
             NotizenEditorController editorController = loader.getController();
             editorController.setHistoryItem(historyItem);
 
-            Stage stage = new Stage();
-            stage.setTitle("Notiz bearbeiten");
-            stage.setScene(new Scene(root));
+            // Erstelle ein neues Fenster für den Notiz-Editor
+            Stage noteEditorStage = new Stage();
+            noteEditorStage.setScene(new Scene(root));
+
+            // Setze das aktuelle Fenster als Owner des neuen Fensters
+            Stage mainStage = (Stage) current_tasks.getScene().getWindow();
+            noteEditorStage.initOwner(mainStage);
+            noteEditorStage.initModality(Modality.APPLICATION_MODAL);
 
             // Titelleiste entfernen
-            stage.initStyle(StageStyle.UNDECORATED);
+            noteEditorStage.initStyle(StageStyle.UNDECORATED);
+
+            // Ändere die Opacity des Hauptfensters, um es ausgegraut darzustellen
+            mainStage.getScene().getRoot().setOpacity(0.7);
 
             // Schließe das Fenster und lade die Historien-Daten neu
-            stage.setOnHiding(event -> loadHistoryData());
+            noteEditorStage.setOnHiding(event -> {
+                loadHistoryData();
+                // Setze die Opacity des Hauptfensters nach dem Schließen des Notiz-Editors zurück
+                mainStage.getScene().getRoot().setOpacity(1.0);
+            });
 
-            stage.show();
+            noteEditorStage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
