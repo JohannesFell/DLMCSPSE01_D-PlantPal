@@ -200,4 +200,21 @@ public class CareTaskHistoryRepository {
             stmt.executeUpdate();
         }
     }
+
+    /**
+     * Löscht die gesamte Historie für eine bestimmte Pflanze aus der `CareTaskHistory`-Tabelle.
+     *
+     * @param plantId Die ID der Pflanze, deren Historie gelöscht werden soll.
+     * @throws SQLException Wenn ein Fehler bei der Datenbankoperation auftritt.
+     */
+    public synchronized void deleteHistoryForPlant(int plantId) throws SQLException {
+        String sql = "DELETE FROM CareTaskHistory WHERE plant_id = ?";
+
+        try (Connection conn = SQLiteDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, plantId);
+            stmt.executeUpdate();
+        }
+    }
 }

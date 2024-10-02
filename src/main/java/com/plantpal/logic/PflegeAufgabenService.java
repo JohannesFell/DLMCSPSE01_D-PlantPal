@@ -84,7 +84,7 @@ public class PflegeAufgabenService {
     }
 
     /**
-     * Berechnet und fügt die nächsten Pflegeaufgaben für alle Pflanzen basierend auf den Intervallen hinzu.
+     * Löscht alle bestehenden Pflegeaufgaben und fügt neue Aufgaben basierend auf den Intervallen hinzu.
      *
      * @throws SQLException wenn ein Fehler beim Zugriff auf die Datenbank auftritt.
      */
@@ -92,17 +92,16 @@ public class PflegeAufgabenService {
         List<PflanzenProfile_Model> plantProfiles = plantProfileRepository.getAllPlantProfiles();
 
         for (PflanzenProfile_Model plantProfile : plantProfiles) {
+            // Lösche alle bestehenden Aufgaben für diese Pflanze
+            careTaskRepository.deleteCareTasksForPlant(plantProfile.getPlant_id());
+
+            // Berechne die neuen Fälligkeitsdaten
             LocalDate nextWatering = calculateNextDate(plantProfile.getLast_watered(), plantProfile.getWatering_interval());
             LocalDate nextFertilizing = calculateNextDate(plantProfile.getLast_fertilized(), plantProfile.getFertilizing_interval());
 
-            // Füge die Pflegeaufgaben für Gießen und Düngen hinzu, wenn sie noch nicht existieren
-            if (!careTaskRepository.careTaskExists(plantProfile.getPlant_id(), "Gießen", nextWatering)) {
-                careTaskRepository.insertCareTask(plantProfile.getPlant_id(), "Gießen", nextWatering);
-            }
-
-            if (!careTaskRepository.careTaskExists(plantProfile.getPlant_id(), "Düngen", nextFertilizing)) {
-                careTaskRepository.insertCareTask(plantProfile.getPlant_id(), "Düngen", nextFertilizing);
-            }
+            // Füge die neuen Aufgaben ein
+            careTaskRepository.insertCareTask(plantProfile.getPlant_id(), "Gießen", nextWatering);
+            careTaskRepository.insertCareTask(plantProfile.getPlant_id(), "Düngen", nextFertilizing);
         }
     }
 

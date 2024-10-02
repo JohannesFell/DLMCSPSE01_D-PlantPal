@@ -297,27 +297,18 @@ public class CareTaskRepository {
     }
 
     /**
-     * Überprüft, ob bereits eine Pflegeaufgabe für die gegebene Pflanze, den Aufgabentyp und das Fälligkeitsdatum existiert.
+     * Löscht alle Pflegeaufgaben für eine bestimmte Pflanze.
      *
-     * @param plantId  Die ID der Pflanze
-     * @param taskType Der Typ der Aufgabe (z.B. Gießen oder Düngen)
-     * @param dueDate  Das Fälligkeitsdatum der Aufgabe
-     * @return true, wenn die Aufgabe bereits existiert, false sonst
-     * @throws SQLException Wenn es Probleme mit der Datenbank gibt
+     * @param plantId Die ID der Pflanze, für die die Aufgaben gelöscht werden sollen.
+     * @throws SQLException wenn ein Fehler beim Zugriff auf die Datenbank auftritt.
      */
-    public boolean careTaskExists(int plantId, String taskType, LocalDate dueDate) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM CareTask WHERE plant_id = ? AND task_type = ? AND due_date = ?";
+    public void deleteCareTasksForPlant(int plantId) throws SQLException {
+        String deleteSql = "DELETE FROM CareTask WHERE plant_id = ?";
+
         try (Connection conn = SQLiteDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(checkSql)) {
+             PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
             stmt.setInt(1, plantId);
-            stmt.setString(2, taskType);
-            stmt.setDate(3, java.sql.Date.valueOf(dueDate));
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
-            }
+            stmt.executeUpdate();
         }
-        return false;
     }
 }

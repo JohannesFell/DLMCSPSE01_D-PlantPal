@@ -1,9 +1,11 @@
 package com.plantpal.app;
 
 import com.plantpal.database.CareTaskHistoryRepository;
+import com.plantpal.database.CareTaskRepository;
 import com.plantpal.database.PhotoLogRepository;
 import com.plantpal.database.PlantProfileRepository;
 import com.plantpal.logic.PflanzenProfileService;
+import com.plantpal.logic.PflegeAufgabenService;
 import com.plantpal.model.PflanzenProfile_Model;
 import com.plantpal.utils.DateUtils;
 import com.plantpal.utils.NotificationUtils;
@@ -90,6 +92,9 @@ public class PflanzenProfileController implements Initializable {
 
     private PflanzenProfileService pflanzenProfileService;
     private PhotoLogRepository photoLogRepository;
+    private PlantProfileRepository plantProfileRepository;
+    private CareTaskHistoryRepository careTaskHistoryRepository;
+    private CareTaskRepository careTaskRepository;
 
     /**
      * Initialisiert den Controller.
@@ -97,8 +102,9 @@ public class PflanzenProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisiere den Service und Repositories
-        PlantProfileRepository plantProfileRepository = new PlantProfileRepository();
-        CareTaskHistoryRepository careTaskHistoryRepository = new CareTaskHistoryRepository();
+        plantProfileRepository = new PlantProfileRepository();
+        careTaskHistoryRepository = new CareTaskHistoryRepository();
+        careTaskRepository = new CareTaskRepository();
         pflanzenProfileService = new PflanzenProfileService(plantProfileRepository, careTaskHistoryRepository);
         photoLogRepository = new PhotoLogRepository();
 
@@ -155,7 +161,7 @@ public class PflanzenProfileController implements Initializable {
      * Fügt ein neues Pflanzenprofil über die Geschäftslogik hinzu.
      */
     @FXML
-    private void addPlant() {
+    private void addPlant() throws SQLException {
         PflanzenProfile_Model newPlant = new PflanzenProfile_Model(
                 0, name.getText(), botanical_name.getText(),
                 DateUtils.parseDate(kaufdatum.getText()),
@@ -170,23 +176,81 @@ public class PflanzenProfileController implements Initializable {
             pflanzenProfil_tableView.refresh();
             clearFormFields();
             NotificationUtils.showNotification(notificationLabel, "Pflanze erfolgreich hinzugefügt!");
+
+            // Einplanung der Gieß- und Düngeaufgaben
+            PflegeAufgabenService pflegeAufgabenService = new PflegeAufgabenService
+                    (careTaskRepository,careTaskHistoryRepository,plantProfileRepository);
+            pflegeAufgabenService.updateAllCareTasks();
         }
     }
 
     /**
-     * Löscht ein ausgewähltes Pflanzenprofil über die Geschäftslogik.
+     * Löscht ein ausgewähltes Pflanzenprofil sowie die zugehörigen Pflegeaufgaben und Historieeinträge nach einer Bestätigung.
+     *
+     * Diese Methode zeigt zunächst ein Bestätigungsfenster an, bevor der Löschvorgang durchgeführt wird.
+     * Wenn der Benutzer den Löschvorgang bestätigt, werden alle Pflegeaufgaben, Historieeinträge und das Pflanzenprofil selbst
+     * aus der Datenbank entfernt. Nach erfolgreicher Löschung wird die Pflanzenprofil-Tabelle aktualisiert und das Formular geleert.
+     * Im Falle eines Fehlers wird eine entsprechende Benachrichtigung angezeigt.
+     *
+     * @see PflanzenProfile_Model
      */
     @FXML
     private void deletePlant() {
         PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
         if (selectedPlant != null) {
-            pflanzenProfileService.deletePlantProfile(selectedPlant.getPlant_id());
-            loadPlantData();
-            pflanzenProfil_tableView.refresh();
-            clearFormFields();
-            NotificationUtils.showNotification(notificationLabel, "Pflanze erfolgreich gelöscht!");
+            try {
+                // Lade das Bestätigungsfenster FXML
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BestaetigungsDialog.fxml"));
+                Parent confirmationView = loader.load();
+
+                // Hole den Controller und setze den Bestätigungstext dynamisch
+                BestaetigungsDialogController bestaetigungsDialogController = loader.getController();
+                bestaetigungsDialogController.setConfirmationText("Möchten Sie die Pflanze '" + selectedPlant.getPlant_name() +
+                        "' wirklich löschen? Es werden alle Pflegeaufgaben sowie die Historieneinträge gelöscht.");
+
+                // Erstelle ein neues Fenster für das Bestätigungsdialog
+                Stage confirmationStage = new Stage();
+                confirmationStage.setScene(new Scene(confirmationView));
+
+                // Hauptfenster als Owner setzen und Modality auf APPLICATION_MODAL setzen
+                Stage mainStage = (Stage) pflanzenProfil_tableView.getScene().getWindow();
+                confirmationStage.initOwner(mainStage);
+                confirmationStage.initModality(Modality.APPLICATION_MODAL);
+
+                // Titelleiste entfernen
+                confirmationStage.initStyle(StageStyle.UNDECORATED);
+
+                // Ändere die Opacity des Hauptfensters, um es ausgegraut darzustellen
+                mainStage.getScene().getRoot().setOpacity(0.7);
+
+                // Zeige das Bestätigungsfenster an und warte auf Bestätigung
+                confirmationStage.showAndWait();
+
+                // Wenn der Benutzer bestätigt, lösche die Pflanze und zugehörige Daten
+                if (bestaetigungsDialogController.isConfirmed()) {
+                    // Lösche alle Pflegeaufgaben und die Historie für diese Pflanze
+                    careTaskRepository.deleteCareTasksForPlant(selectedPlant.getPlant_id());
+                    careTaskHistoryRepository.deleteHistoryForPlant(selectedPlant.getPlant_id());
+
+                    // Lösche das Pflanzenprofil
+                    pflanzenProfileService.deletePlantProfile(selectedPlant.getPlant_id());
+
+                    // Aktualisiere die Ansicht
+                    loadPlantData();
+                    pflanzenProfil_tableView.refresh();
+                    clearFormFields();
+                    NotificationUtils.showNotification(notificationLabel, "Pflanze erfolgreich gelöscht!");
+                }
+                // Setze die Opacity des Hauptfensters nach dem Schließen des Bestätigungsfensters zurück
+                mainStage.getScene().getRoot().setOpacity(1.0);
+
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+                NotificationUtils.showNotification(notificationLabel, "Fehler beim Löschen der Pflanze.");
+            }
         }
     }
+
 
     /**
      * Aktualisiert das ausgewählte Pflanzenprofil und schreibt Änderungen in die Historie.
@@ -209,6 +273,11 @@ public class PflanzenProfileController implements Initializable {
                 // Aktualisiere das Pflanzenprofil und schreibe die Historie
                 pflanzenProfileService.updatePlantProfile(selectedPlant);
                 NotificationUtils.showNotification(notificationLabel, "Profil erfolgreich aktualisiert");
+
+                // Einplanung der Gieß- und Düngeaufgaben
+                PflegeAufgabenService pflegeAufgabenService = new PflegeAufgabenService
+                        (careTaskRepository,careTaskHistoryRepository,plantProfileRepository);
+                pflegeAufgabenService.updateAllCareTasks();
 
                 // Tabelle aktualisieren
                 loadPlantData();

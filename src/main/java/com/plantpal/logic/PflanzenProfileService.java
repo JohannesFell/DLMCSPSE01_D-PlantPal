@@ -74,9 +74,10 @@ public class PflanzenProfileService {
             if (currentPlant != null) {
                 // Überprüfe Änderungen und schreibe Historie mit alter und neuer Wert-Notiz
                 if (!currentPlant.getPlant_name().equals(updatedPlant.getPlant_name())) {
+                    int taskIdNameGeaendert = 1001;
                     careTaskHistoryRepository.insertIntoHistoryWithNote(
                             updatedPlant.getPlant_id(),
-                            1001, // taskId für "Name geändert"
+                            taskIdNameGeaendert, // taskId für "Name geändert"
                             "Name geändert",
                             currentPlant.getPlant_name(),
                             updatedPlant.getPlant_name(),
@@ -85,9 +86,10 @@ public class PflanzenProfileService {
                 }
 
                 if (!currentPlant.getLocation().equals(updatedPlant.getLocation())) {
+                    int taskIdStandortGeaendert = 1002;
                     careTaskHistoryRepository.insertIntoHistoryWithNote(
                             updatedPlant.getPlant_id(),
-                            1002, // taskId für "Standort geändert"
+                            taskIdStandortGeaendert, // taskId für "Standort geändert"
                             "Standort geändert",
                             currentPlant.getLocation(),
                             updatedPlant.getLocation(),
@@ -96,9 +98,10 @@ public class PflanzenProfileService {
                 }
 
                 if (currentPlant.getWatering_interval() != updatedPlant.getWatering_interval()) {
+                    int taskIdGiessenGeaendert = 1003;
                     careTaskHistoryRepository.insertIntoHistoryWithNote(
                             updatedPlant.getPlant_id(),
-                            1003, // taskId für "Gießintervall geändert"
+                            taskIdGiessenGeaendert, // taskId für "Gießintervall geändert"
                             "Gießintervall geändert",
                             String.valueOf(currentPlant.getWatering_interval()),
                             String.valueOf(updatedPlant.getWatering_interval()),
@@ -107,9 +110,10 @@ public class PflanzenProfileService {
                 }
 
                 if (currentPlant.getFertilizing_interval() != updatedPlant.getFertilizing_interval()) {
+                    int taskIdDuengenGeaendert = 1004;
                     careTaskHistoryRepository.insertIntoHistoryWithNote(
                             updatedPlant.getPlant_id(),
-                            1004, // taskId für "Düngeintervall geändert"
+                            taskIdDuengenGeaendert, // taskId für "Düngeintervall geändert"
                             "Düngeintervall geändert",
                             String.valueOf(currentPlant.getFertilizing_interval()),
                             String.valueOf(updatedPlant.getFertilizing_interval()),
