@@ -316,14 +316,22 @@ public class PflanzenPflegeController implements Initializable {
             // Ändere die Opacity des Hauptfensters, um es ausgegraut darzustellen
             mainStage.getScene().getRoot().setOpacity(0.7);
 
-            // Schließe das Fenster und lade die Historien-Daten neu
+            // Schließe das Fenster und aktualisiere den Button-Text für den bearbeiteten Eintrag
             noteEditorStage.setOnHiding(event -> {
-                loadHistoryData();
-                // Setze die Opacity des Hauptfensters nach dem Schließen des Notiz-Editors zurück
-                mainStage.getScene().getRoot().setOpacity(1.0);
+                // Überprüfe, ob die Notiz vorhanden ist und aktualisiere den Eintrag
+                if (historyItem.getNote() != null && !historyItem.getNote().isEmpty()) {
+                    int rowIndex = historyList.indexOf(historyItem);
+
+                    // Aktualisiere die Daten und die Tabelle
+                    history.getItems().set(rowIndex, historyItem);
+                    history.refresh();
+                }
             });
 
             noteEditorStage.showAndWait();
+
+            // Setze die Opacity des Hauptfensters nach dem Schließen des Notiz-Editors zurück
+            mainStage.getScene().getRoot().setOpacity(1.0);
 
         } catch (IOException e) {
             e.printStackTrace();
