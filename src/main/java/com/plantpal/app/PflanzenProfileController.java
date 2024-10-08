@@ -162,6 +162,13 @@ public class PflanzenProfileController implements Initializable {
      */
     @FXML
     private void addPlant() throws SQLException {
+
+        // Datum validieren
+        if (DateUtils.parseDate(kaufdatum.getText()) == null) {
+            NotificationUtils.showNotification(notificationLabel, "Ungültiges Datum. Bitte im Format dd.MM.yyyy eingeben.");
+            return;
+        }
+
         PflanzenProfile_Model newPlant = new PflanzenProfile_Model(
                 0, name.getText(), botanical_name.getText(),
                 DateUtils.parseDate(kaufdatum.getText()),
@@ -260,6 +267,12 @@ public class PflanzenProfileController implements Initializable {
         PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
         if (selectedPlant != null) {
             try {
+                // Datum validieren
+                if (DateUtils.parseDate(kaufdatum.getText()) == null) {
+                    NotificationUtils.showNotification(notificationLabel, "Ungültiges Datum. Bitte im Format dd.MM.yyyy eingeben.");
+                    return;
+                }
+
                 // Verwende den DateTimeFormatter zum Parsen des Datums
                 LocalDate parsedKaufdatum = DateUtils.parseDate(kaufdatum.getText());
 
