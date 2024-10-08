@@ -20,3 +20,20 @@ li {
     line-height: 1.6;
     font-family: 'Tahoma';
 }
+
+h2 {
+    font-family: Tahoma;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+h3 {
+    font-family: Tahoma;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #555;
+}
+

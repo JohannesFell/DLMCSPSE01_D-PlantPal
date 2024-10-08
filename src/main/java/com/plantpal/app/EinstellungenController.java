@@ -3,13 +3,22 @@ package com.plantpal.app;
 import com.plantpal.logic.EinstellungenManager;
 import com.plantpal.model.Einstellungen_Model;
 import com.plantpal.utils.NotificationUtils;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -36,6 +45,9 @@ public class EinstellungenController implements Initializable {
     @FXML
     private Button btn_save;
 
+    @FXML
+    private FontAwesomeIconView info;
+
     private final EinstellungenManager einstellungenManager = new EinstellungenManager();
     private MainScreenController mainScreenController;
 
@@ -53,6 +65,9 @@ public class EinstellungenController implements Initializable {
         // Initiale Überprüfung für UI-Status
         toggleAppNotificationSettings(chk_app_notification.isSelected());
         toggleMailSettings(chk_mail_notification.isSelected());
+
+        // Listener für das Info-Icon hinzufügen
+        info.setOnMouseClicked(event -> showFieldInfo());
     }
 
     /**
@@ -187,5 +202,74 @@ public class EinstellungenController implements Initializable {
      */
     public void setMainScreenController(MainScreenController mainScreenController) {
         this.mainScreenController = mainScreenController;
+    }
+
+    /**
+     * Öffnet das modale Infofenster, um Informationen zu den Feldern anzuzeigen.
+     */
+    @FXML
+    private void showFieldInfo() {
+        try {
+            // Lade das FXML für den InfoDialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InfoDialog.fxml"));
+            Parent root = loader.load();
+
+            // Hole den InfoDialogController
+            InfoDialogController infoDialogController = loader.getController();
+
+            // Setze den HTML-Inhalt mit der Erklärung zu den Mailjet-Feldern und Daten
+            String htmlContent = """
+                        <h2>Mailjet Konfiguration</h2>
+                         <p>Mailjet ermöglicht das Versenden von E-Mails über einen API-Dienst.
+                         Um dies zu nutzen, benötigen Sie einen Mailjet-Account.
+                         Die erforderlichen Schlüssel und weitere Informationen finden Sie in Ihrem Mailjet-Dashboard.
+                         </p>
+                                         
+                         <h3>Auszufüllende Felder:</h3>
+                            <ul>
+                             <li><strong>Empfänger-E-Mail:</strong> Die E-Mail-Adresse, an die Benachrichtigungen gesendet werden.</li>
+                             <li><strong>Absender-E-Mail:</strong> Die E-Mail-Adresse, von der aus Benachrichtigungen gesendet werden.</li>
+                             <li><strong>API-Schlüssel:</strong> Der öffentliche API-Schlüssel von Mailjet, den Sie in Ihrem Mailjet-Konto finden.</li>
+                             <li><strong>Privater API-Schlüssel:</strong> Der private API-Schlüssel, der zur Authentifizierung Ihrer API-Anfragen verwendet wird.</li>
+                            </ul>
+                                         
+                         <p><strong>Hinweis:</strong> Alle Daten werden nur lokal auf Ihrem Gerät gespeichert.
+                         Weitere Informationen zur Einrichtung der API finden Sie <a href="https://dev.mailjet.com/email/guides/">hier</a>.</p>
+                    """;
+
+            // Setze HTML-Inhalt im WebView
+            infoDialogController.setHtmlContent(htmlContent);
+
+            // Lade das CSS-Stylesheet für das WebView
+            String cssFilePath = Objects.requireNonNull(getClass().getResource("/css/webview_style.css")).toExternalForm();
+            infoDialogController.applyCss(cssFilePath);
+
+            // Öffne Links im externen Browser
+            infoDialogController.setLinkHandler();
+
+            // Erstelle das neue Stage für das InfoDialog-Fenster
+            Stage infoStage = new Stage();
+            infoStage.setScene(new Scene(root));
+
+            // Hauptfenster als Owner setzen und Modality einstellen
+            Stage mainStage = (Stage) info.getScene().getWindow();
+            infoStage.initOwner(mainStage);
+            infoStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Titelleiste entfernen
+            infoStage.initStyle(StageStyle.UNDECORATED);
+
+            // Hauptfenster ausgrauen
+            mainStage.getScene().getRoot().setOpacity(0.7);
+
+            // Setze die Opacity zurück, wenn das Fenster geschlossen wird
+            infoStage.setOnHiding(event -> mainStage.getScene().getRoot().setOpacity(1.0));
+
+            // Zeige den Dialog
+            infoStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
