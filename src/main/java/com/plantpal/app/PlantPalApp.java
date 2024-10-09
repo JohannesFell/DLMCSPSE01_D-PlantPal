@@ -93,7 +93,7 @@ public class PlantPalApp extends Application {
         // Prüfen, ob In-App-Benachrichtigungen aktiviert sind
         boolean isAppNotificationEnabled = settings.isAppNotification();
 
-        if (isAppNotificationEnabled) {
+        if (isAppNotificationEnabled && mainScreenController != null) {
             // Badge wird aktualisiert
             mainScreenController.updateNotificationButton();
         }
@@ -102,7 +102,7 @@ public class PlantPalApp extends Application {
     /**
      * Startet einen Scheduler, der täglich um Mitternacht die Benachrichtigungen überprüft.
      */
-    private void startNotificationScheduler() {
+    public void startNotificationScheduler() {
         scheduler = Executors.newScheduledThreadPool(1);
 
         // Berechne die Zeit bis Mitternacht für die erste Ausführung
