@@ -168,6 +168,21 @@ public class PlantProfileRepository {
     }
 
     /**
+     * Verwendung nur in JUnit-Test
+     * Löscht ein Pflanzenprofil aus der Datenbank (anhand des Pflanzennamens)
+     * @param plantName Der Name der Pflanze der gelöscht werden soll.
+     */
+    public void deletePlantByName(String plantName) throws SQLException {
+        try (Connection connection = SQLiteDB.getConnection()) {
+            String sql = "DELETE FROM PlantProfile WHERE plant_name = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setString(1, plantName);
+                pstmt.executeUpdate();
+            }
+        }
+    }
+
+    /**
      * Lädt alle distinct Pflanzennamen aus der PlantProfile-Tabelle.
      * @return Liste der distinct Pflanzennamen.
      */
