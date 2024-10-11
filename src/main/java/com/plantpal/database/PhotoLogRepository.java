@@ -61,5 +61,15 @@ public class PhotoLogRepository {
         }
         return photos;
     }
+
+    public void deletePhotoByPath(String photoPath) throws SQLException {
+        String sql = "DELETE FROM PhotoLog WHERE photo_path = ?";
+        try (Connection conn = SQLiteDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, photoPath);
+            pstmt.executeUpdate();
+        }
+    }
+
 }
 
