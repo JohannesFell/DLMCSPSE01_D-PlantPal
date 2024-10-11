@@ -36,6 +36,12 @@ public class ImageService {
             throw new IllegalArgumentException("Bilddatei oder Pflanzenprofil ist ungültig.");
         }
 
+        // Überprüfen, ob das Dateiformat gültig ist (nur PNG, JPG, JPEG)
+        String fileName = selectedFile.getName().toLowerCase();
+        if (!(fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))) {
+            throw new IllegalArgumentException("Ungültiges Dateiformat. Nur PNG, JPG und JPEG sind erlaubt.");
+        }
+
         // Zielordner im Ressourcenverzeichnis
         Path destinationDir = Path.of("src/main/resources/images/uploads/");
         if (!Files.exists(destinationDir)) {
