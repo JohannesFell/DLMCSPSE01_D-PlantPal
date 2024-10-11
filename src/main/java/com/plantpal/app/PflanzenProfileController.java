@@ -4,6 +4,7 @@ import com.plantpal.database.CareTaskHistoryRepository;
 import com.plantpal.database.CareTaskRepository;
 import com.plantpal.database.PhotoLogRepository;
 import com.plantpal.database.PlantProfileRepository;
+import com.plantpal.logic.ImageService;
 import com.plantpal.logic.PflanzenProfileService;
 import com.plantpal.logic.PflegeAufgabenService;
 import com.plantpal.model.PflanzenProfile_Model;
@@ -95,6 +96,7 @@ public class PflanzenProfileController implements Initializable {
     private PlantProfileRepository plantProfileRepository;
     private CareTaskHistoryRepository careTaskHistoryRepository;
     private CareTaskRepository careTaskRepository;
+    private ImageService imageService;
 
     /**
      * Initialisiert den Controller.
@@ -107,6 +109,7 @@ public class PflanzenProfileController implements Initializable {
         careTaskRepository = new CareTaskRepository();
         pflanzenProfileService = new PflanzenProfileService(plantProfileRepository, careTaskHistoryRepository);
         photoLogRepository = new PhotoLogRepository();
+        imageService = new ImageService();
 
 
         // ComboBox für Gieß- und Düngeintervall mit Werten 1-31 initialisieren
@@ -420,9 +423,7 @@ public class PflanzenProfileController implements Initializable {
     }
 
     /**
-     * Diese Methode öffnet einen FileChooser, mit dem der Benutzer ein Bild hochladen kann.
-     * Das ausgewählte Bild wird in den Ressourcenordner der Anwendung kopiert
-     * und in der ImageView angezeigt.
+     * Verarbeitet den Import eines Bildes.
      */
     @FXML
     private void handleImageImport() {
@@ -432,35 +433,19 @@ public class PflanzenProfileController implements Initializable {
 
         // Öffnen des Dialogs zur Dateiauswahl
         File selectedFile = fileChooser.showOpenDialog(image_import.getScene().getWindow());
+        PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
 
-        if (selectedFile != null) {
+        if (selectedFile != null && selectedPlant != null) {
             try {
-                // Zielordner im Ressourcenverzeichnis
-                Path destinationDir = Path.of("src/main/resources/images/uploads/");
-                if (!Files.exists(destinationDir)) {
-                    Files.createDirectories(destinationDir);  // Verzeichnisse erstellen, falls sie nicht existieren
-                }
-
-                // Verwende die Methode aus DateUtils, um den neuen Dateinamen mit Zeitstempel zu generieren
-                String newFileName = DateUtils.appendTimestampToFileName(selectedFile.getName());
-
-                // Zielpfad der Bilddatei
-                Path destinationFile = destinationDir.resolve(newFileName);
-
-                // Kopieren der ausgewählten Datei in den Ressourcenordner
-                Files.copy(selectedFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
-
-                // Bildpfad in die Datenbank speichern
-                PflanzenProfile_Model selectedPlant = pflanzenProfil_tableView.getSelectionModel().getSelectedItem();
-                PhotoLogRepository photoLogRepository = new PhotoLogRepository();
-                photoLogRepository.savePhoto(selectedPlant.getPlant_id(), destinationFile.toString(), LocalDateTime.now());
-
-                // Nach erfolgreichem Upload das neueste Bild anzeigen
+                imageService.importImage(selectedFile, selectedPlant);
                 NotificationUtils.showNotification(notificationLabel, "Bild erfolgreich hinzugefügt!");
                 showLatestImage();
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
+                NotificationUtils.showNotification(notificationLabel, "Fehler beim Hinzufügen des Bildes.");
             }
+        } else {
+            NotificationUtils.showNotification(notificationLabel, "Bitte wählen Sie eine Pflanze und ein Bild aus.");
         }
     }
 
