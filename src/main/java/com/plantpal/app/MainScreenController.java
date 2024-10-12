@@ -3,6 +3,7 @@ package com.plantpal.app;
 import com.plantpal.database.CareTaskHistoryRepository;
 import com.plantpal.database.CareTaskRepository;
 import com.plantpal.database.PlantProfileRepository;
+import com.plantpal.database.SettingsRepository;
 import com.plantpal.logic.BenachrichtigungsService;
 import com.plantpal.logic.EinstellungenManager;
 import com.plantpal.logic.EmailService;
@@ -17,6 +18,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -78,6 +81,9 @@ public class MainScreenController implements Initializable {
     @FXML
     private Label notificationLabel;
 
+    @FXML
+    private ImageView mainImageView;
+
     private BenachrichtigungsService benachrichtigungsService;
     private PflegeAufgabenService pflegeAufgabenService;
     private BenachrichtigungsController benachrichtigungsController;
@@ -107,6 +113,16 @@ public class MainScreenController implements Initializable {
 
         // Event-Handler für das Klicken auf das Benachrichtigungs-Icon
         btn_notifications.setOnMouseClicked(event -> showNotifications());
+
+        // Pfad zum Bild im Resource-Ordner
+        String imagePath = "/images/plantpalLogoTransparent.png";  // Pfad relativ zum Resource-Ordner
+
+        // Lade das Bild und setze es im ImageView
+        Image mainImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+        mainImageView.setImage(mainImage);
+
+        // Setze die ImageView sichtbar beim Start
+        mainImageView.setVisible(true);
     }
 
     /**
@@ -245,6 +261,9 @@ public class MainScreenController implements Initializable {
         Parent fxml = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
         contentArea.getChildren().clear();
         contentArea.getChildren().add(fxml);
+
+        // Sobald eine neue Ansicht geladen wird, wird das Bild ausgeblendet
+        mainImageView.setVisible(false);
     }
 
     public void pflanzenprofile() throws IOException {
