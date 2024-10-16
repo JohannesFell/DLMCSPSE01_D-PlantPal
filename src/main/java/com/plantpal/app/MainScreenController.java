@@ -3,7 +3,6 @@ package com.plantpal.app;
 import com.plantpal.database.CareTaskHistoryRepository;
 import com.plantpal.database.CareTaskRepository;
 import com.plantpal.database.PlantProfileRepository;
-import com.plantpal.database.SettingsRepository;
 import com.plantpal.logic.BenachrichtigungsService;
 import com.plantpal.logic.EinstellungenManager;
 import com.plantpal.logic.EmailService;
@@ -257,6 +256,12 @@ public class MainScreenController implements Initializable {
         }
     }
 
+    /**
+     * Lädt eine neue Ansicht und blendet das Startbild aus.
+     *
+     * @param fxmlPath Der Pfad zur FXML-Datei der Ansicht
+     * @throws IOException Falls das Laden der FXML-Datei fehlschlägt
+     */
     private void loadView(String fxmlPath) throws IOException {
         Parent fxml = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
         contentArea.getChildren().clear();
@@ -266,8 +271,31 @@ public class MainScreenController implements Initializable {
         mainImageView.setVisible(false);
     }
 
+    /**
+     * Lädt eine neue Ansicht und setzt den MainScreenController im geladenen Controller.
+     *
+     * @param <T> Der Typ des Controllers
+     * @throws IOException Falls das Laden der FXML-Datei fehlschlägt
+     */
+    private <T> void loadViewWithController() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PflanzenProfile.fxml"));
+        Parent root = loader.load();
+        T controller = loader.getController();
+
+        // Überprüfen, ob der Controller der erwartete Typ ist
+        if (controller instanceof PflanzenProfileController) {
+            ((PflanzenProfileController) controller).setMainScreenController(this);
+        }
+
+        contentArea.getChildren().clear();
+        contentArea.getChildren().add(root);
+
+        // Bild ausblenden, sobald eine neue Ansicht geladen wird
+        mainImageView.setVisible(false);
+    }
+
     public void pflanzenprofile() throws IOException {
-        loadView("/fxml/PflanzenProfile.fxml");
+        loadViewWithController();
     }
 
     public void pflanzenpflege() throws IOException {

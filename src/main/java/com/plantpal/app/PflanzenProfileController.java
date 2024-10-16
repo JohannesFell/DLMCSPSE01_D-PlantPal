@@ -97,6 +97,7 @@ public class PflanzenProfileController implements Initializable {
     private CareTaskHistoryRepository careTaskHistoryRepository;
     private CareTaskRepository careTaskRepository;
     private ImageService imageService;
+    private MainScreenController mainScreenController;
 
     /**
      * Initialisiert den Controller.
@@ -149,6 +150,15 @@ public class PflanzenProfileController implements Initializable {
     }
 
     /**
+     * Setzt den MainScreenController, um Benachrichtigungen nach Änderungen zu aktualisieren.
+     *
+     * @param mainScreenController Der MainScreenController, der gesetzt wird.
+     */
+    public void setMainScreenController(MainScreenController mainScreenController) {
+        this.mainScreenController = mainScreenController;
+    }
+
+    /**
      * Lädt die Pflanzenprofildaten aus der Datenbank und aktualisiert die TableView.
      * Der Datenbankzugriff ist synchronisiert, um parallele Zugriffe zu verhindern.
      */
@@ -191,6 +201,11 @@ public class PflanzenProfileController implements Initializable {
             PflegeAufgabenService pflegeAufgabenService = new PflegeAufgabenService
                     (careTaskRepository,careTaskHistoryRepository,plantProfileRepository);
             pflegeAufgabenService.updateAllCareTasks();
+
+            // Aktualisierung des BenachrichtigungsBadge
+            if (mainScreenController != null) {
+                mainScreenController.updateNotificationButton();
+            }
         }
     }
 
@@ -254,6 +269,11 @@ public class PflanzenProfileController implements Initializable {
                 // Setze die Opacity des Hauptfensters nach dem Schließen des Bestätigungsfensters zurück
                 mainStage.getScene().getRoot().setOpacity(1.0);
 
+                // Aktualisierung des BenachrichtigungsBadge
+                if (mainScreenController != null) {
+                    mainScreenController.updateNotificationButton();
+                }
+
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
                 NotificationUtils.showNotification(notificationLabel, "Fehler beim Löschen der Pflanze.");
@@ -298,6 +318,11 @@ public class PflanzenProfileController implements Initializable {
                 // Tabelle aktualisieren
                 loadPlantData();
                 pflanzenProfil_tableView.refresh();
+
+                // Aktualisierung des BenachrichtigungsBadge
+                if (mainScreenController != null) {
+                    mainScreenController.updateNotificationButton();
+                }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 NotificationUtils.showNotification(notificationLabel, "Fehler beim Aktualisieren des Profils");
