@@ -43,6 +43,9 @@ public class PlantPalApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            // Öffne die Datenbank und erstelle die Tabellen
+            SQLiteDB.createTables();  // Stelle sicher, dass die Tabellen nur einmalig erstellt werden
+
             // Lade die MainScreen.fxml und den zugehörigen Controller
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/MainScreen.fxml")));
             Parent root = loader.load();
@@ -67,9 +70,6 @@ public class PlantPalApp extends Application {
             primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.setScene(new Scene(root, 1200, 800));
             primaryStage.show();
-
-            // Öffne die Datenbank und erstelle die Tabellen
-            SQLiteDB.createTables();  // Stelle sicher, dass die Tabellen nur einmalig erstellt werden
 
             // Überprüfe die Benachrichtigungen beim Start
             checkNotifications();
