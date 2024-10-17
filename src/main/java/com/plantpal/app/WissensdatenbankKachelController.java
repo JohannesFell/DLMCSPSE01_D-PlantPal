@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.Objects;
-
 public class WissensdatenbankKachelController {
 
     @FXML
@@ -26,8 +24,8 @@ public class WissensdatenbankKachelController {
     public void setTileData(WissensdatenbankService.KnowledgeBaseEntry entry, WissensdatenbankController parentController) {
 
         lbl_name.setText(entry.getName());
-        if (entry.getImagePath() != null) {
-            image.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + entry.getImagePath()))));
+        if (entry.getImagePath() != null && getClass().getResourceAsStream("/" + entry.getImagePath()) != null) {
+            image.setImage(new Image(getClass().getResourceAsStream("/" + entry.getImagePath())));
         }
 
         tilePane.setOnMouseClicked(event -> parentController.openDetails(entry));

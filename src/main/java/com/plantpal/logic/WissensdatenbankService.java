@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +16,8 @@ public class WissensdatenbankService {
 
     // Methode zum Laden der Einträge aus der JSON-Datei
     public List<KnowledgeBaseEntry> loadKnowledgeBase() {
-        try (Reader reader = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(KNOWLEDGE_BASE_FILE)))) {
+        try (Reader reader = new InputStreamReader(
+                Objects.requireNonNull(getClass().getResourceAsStream(KNOWLEDGE_BASE_FILE)), StandardCharsets.UTF_8)) {
             Gson gson = new Gson();
             Type knowledgeBaseListType = new TypeToken<List<KnowledgeBaseEntry>>() {}.getType();
             return gson.fromJson(reader, knowledgeBaseListType);

@@ -5,7 +5,7 @@
     "identification": "<p>Blattläuse sind winzige, grüne, schwarze oder gelbe Insekten, die sich auf den Blättern und Trieben ansiedeln. Sie hinterlassen einen klebrigen Honigtau, der zu Rußpilzen führen kann. Befallene Pflanzen zeigen oft verkrüppelte oder gelbe Blätter.</p>",
     "control": "<ul><li>Natürliche Feinde wie Marienkäfer einsetzen.</li><li>Betroffene Pflanzen mit einer Seifenlösung besprühen.</li><li>Bei starkem Befall spezielle Insektizide verwenden.</li></ul>",
     "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/blattlaeuse/",
-    "imagePath": "images/wissensdatenbank/Blattläuse.jpg",
+    "imagePath": "images/wissensdatenbank/Blattlaeuse.jpg",
     "imageAuthor": "Bild von Andrey Tikhonovskiy auf Unsplash"
   },
   {
@@ -77,7 +77,7 @@
     "identification": "Schwarze, fliegende Insekten in der Nähe der Pflanze, Larven im Boden.",
     "control": "<ul><li>Neemöl oder Nematoden gegen Larven</li><li>Gelbtafeln gegen erwachsene Fliegen</li><li>Gießverhalten anpassen</li></ul>",
     "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/trauermuecken/",
-    "imagePath": "images/wissensdatenbank/Trauermücken.jpg",
+    "imagePath": "images/wissensdatenbank/Trauermuecken.jpg",
     "imageAuthor": "Bild von Maja Dumat - Creative Commons Licence BY 2.0"
   },
   {
@@ -86,7 +86,7 @@
     "identification": "Weiße, kleine Fliegen an der Unterseite der Blätter.",
     "control": "<ul><li>Gelbtafeln einsetzen</li><li>Neemöl oder Insektizide verwenden</li><li>Abspülen der Blätter mit Wasser</li></ul>",
     "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/weisse-fliege/",
-    "imagePath": "images/wissensdatenbank/Weiße Fliege.jpg",
+    "imagePath": "images/wissensdatenbank/Weisse Fliege.jpg",
     "imageAuthor": "Bild von picture-alliance/dpa"
   },
   {
@@ -95,7 +95,7 @@
     "identification": "Verfärbte, matschige Wurzeln und welkende Blätter.",
     "control": "<ul><li>Gut durchlässige Erde verwenden</li><li>Staunässe vermeiden</li><li>Wurzelbehandlung mit Fungiziden</li></ul>",
     "additional_info": "https://www.pflanzen-koelle.de/ratgeber/pflanzendoktor/schaedlinge-und-krankheiten/wurzelfaeule/",
-    "imagePath": "images/wissensdatenbank/Wurzelfäule.jpg",
+    "imagePath": "images/wissensdatenbank/Wurzelfaeule.jpg",
     "imageAuthor": "Bild von Maja Dumat from Deutschland (Germany), CC BY 2.0, via Wikimedia Commons"
   }
 ]
