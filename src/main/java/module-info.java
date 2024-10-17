@@ -22,4 +22,6 @@ module com.plantpal.PlantPal {
     opens com.plantpal.model to javafx.fxml;
     exports com.plantpal.logic;
     opens com.plantpal.logic to com.google.gson, javafx.fxml;
+    exports com.plantpal.database;
+    opens com.plantpal.database to com.zaxxer.hikari;
 }
