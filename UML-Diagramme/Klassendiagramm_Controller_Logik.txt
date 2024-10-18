@@ -1,0 +1,216 @@
+'Klassendiagramm Controller-Logik
+@startuml
+skinparam defaultFontName Courier
+skinparam linetype ortho
+left to right direction
+package app {
+class BenachrichtigungsController {
+  +initialize()
+  +setNotificationData()
+  +sendEmailNotification()
+  +generateEmailContentFromGridPane()
+  +erledigt()
+  +closeNotification()
+  +rearrangeGridPane()
+  +toggleSendMailButton()
+  +getGridPane()
+  +setPflegeAufgabenService()
+  +setEmailService()
+  +setEinstellungen()
+}
+class BestaetigungsDialogController {
+  +setConfirmationText()
+  +handleConfirm()
+  +isConfirmed()
+  +closeWindow()
+  +initialize()
+}
+class EinstellungenController {
+  +initialize()
+  +initializeComboBox()
+  +loadSettings()
+  +populateSettingsFields()
+  +saveSettings()
+  +updateNotificationVisibilityAfterSettingsSaved()
+  +toggleAppNotificationSettings()
+  +toggleMailSettings()
+  +setMainScreenController()
+  +showFieldInfo()
+}
+class InfoDialogController {
+  +setHtmlContent()
+  +handleConfirm()
+  +closeWindow()
+  +initialize()
+  +applyCss()
+  +setLinkHandler()
+}
+class MainScreenController {
+  +initialize()
+  +updateNotificationButton()
+  +updateNotificationVisibility()
+  +checkInAppNotificationSettings()
+  +showNotifications()
+  +updateSendMailButtonVisibility()
+  +loadView()
+  +pflanzenprofile()
+  +pflanzenpflege()
+  +wissensdatenbank()
+  +einstellungen()
+}
+class NotizenEditorController {
+  +initialize()
+  +setHistoryItem()
+  +saveNote()
+}
+class PflanzenPflegeController {
+  +initialize()
+  +setupTableColumns()
+  +createButtonCellFactoryForTasks()
+  +createButtonCellFactoryForHistory()
+  +loadFilterOptions()
+  +loadTaskData()
+  +loadHistoryData()
+  +setupFilterListeners()
+  +resetFilters()
+  +loadHistoryDataForPlant()
+  +applyFilters()
+  +openNoteEditor()
+}
+class PflanzenProfileController {
+  +initialize()
+  +loadPlantData()
+  +addPlant()
+  +deletePlant()
+  +updatePlantProfile()
+  +applySearchFilter()
+  +clearFormFields()
+  +populateFormFields()
+  +setupTableColumns()
+  +getComboBoxValue()
+  +checkMandatoryFields()
+  +addSuffixToColumn()
+  +handleImageImport()
+  +showLatestImage()
+  +setDefaultImage()
+  +showImageSlideshow()
+}
+class PlantPalApp #LightGreen{
+  +main()
+  +start()
+  +checkNotifications()
+  +startNotificationScheduler()
+  +stop()
+}
+class SlideshowController {
+  +initializeSlideshow()
+  +showImage()
+  +nextImage()
+  +previousImage()
+  +handleExit()
+}
+class WissensdatenbankController {
+  +initialize()
+  +loadKnowledgeBaseEntries()
+  +openDetails()
+}
+class WissensdatenbankDetailsController {
+  +initialize()
+  +openLink()
+  +setDetails()
+}
+class WissensdatenbankKachelController{
+  +setTileData()
+}
+}
+
+package logic {
+class BenachrichtigungsService {
+  +checkAndNotifyUpcomingTasks()
+  +getTasksDueIn()
+}
+class PflegeAufgabenService {
+  +loadCurrentTasks()
+  +loadHistory()
+  +loadHistoryForPlant()
+  +getDistinctTaskTypes()
+  +markTaskAsCompleted()
+  +updateAllCareTasks()
+  +calculateNextDate()
+}
+class EmailService {
+  +sendMail()
+}
+class PflanzenProfileService {
+  +getDistinctPlantNames()
+  +getDistinctLocations()
+  +getAllPlantProfiles()
+  +addPlantProfile()
+  +updatePlantProfile()
+  +deletePlantProfile()
+}
+class WissensdatenbankService {
+  +loadKnowledgeBase()
+}
+class FilterService{
+  +filterTasks()
+  +filterHistory()
+}
+class ImageService{
+  +importImage()
+}
+class NotizenService {
+  +updateNoteInHistory()
+}
+class Einstellungsmanager {
+  +loadSettings()
+  +saveSettings()
+}
+}
+
+PlantPalApp -[Bold,#Green]--> MainScreenController : #0
+BenachrichtigungsController -[#Crimson]--> BenachrichtigungsService : #1
+BenachrichtigungsController -[#Navy]--> PflegeAufgabenService : #2
+BenachrichtigungsController -[#Red]--> EmailService : #3
+MainScreenController -[#MidnightBlue]--> PflegeAufgabenService : #4
+MainScreenController -[#Purple]--> EmailService : #5
+MainScreenController -[#Teal]--> BenachrichtigungsService : #6
+WissensdatenbankController -[#Tomato]--> WissensdatenbankService : #7
+PflanzenProfileController -[#Brown]--> PflanzenProfileService : #8
+PflanzenPflegeController -[#Cyan]--> PflegeAufgabenService : #9
+EinstellungenController -[#Violet]--> InfoDialogController : #10
+EinstellungenController -[#SeaGreen]--> Einstellungsmanager : #11
+NotizenEditorController -[#Purple]--> NotizenService: #12
+PflanzenProfileController -[#Red]--> SlideshowController: #13
+PflanzenPflegeController -[#Navy]--> NotizenEditorController: #14
+WissensdatenbankController -[#Black]--> WissensdatenbankDetailsController: # 15
+WissensdatenbankController -[#Navy]--> WissensdatenbankKachelController: # 16
+PflanzenProfileController -[#Teal]--> BestaetigungsDialogController: #17
+PflanzenPflegeController -[#Crimson]--> FilterService: #18
+PflanzenProfileController -[#MidnightBlue]--> ImageService: #19
+
+@enduml
+
+/'Legende der Beziehungen:
+
+0. **PlantPalApp** → **MainScreenController**: Die Anwendung startet und verbindet sich mit dem Hauptbildschirm-Controller.
+1. **BenachrichtigungsController** → **BenachrichtigungsService**: Der Benachrichtigungscontroller verwendet den Benachrichtigungsservice für das Senden von Benachrichtigungen.
+2. **BenachrichtigungsController** → **PflegeAufgabenService**: Der Benachrichtigungscontroller interagiert mit dem Pflegeaufgabenservice.
+3. **BenachrichtigungsController** → **EmailService**: Der Benachrichtigungscontroller sendet E-Mails über den EmailService.
+4. **MainScreenController** → **PflegeAufgabenService**: Der Hauptbildschirmcontroller verwendet den Pflegeaufgabenservice zur Anzeige und Bearbeitung von Pflegeaufgaben.
+5. **MainScreenController** → **EmailService**: Der Hauptbildschirmcontroller interagiert mit dem EmailService, um Benachrichtigungen per E-Mail zu versenden.
+6. **MainScreenController** → **BenachrichtigungsService**: Der Hauptbildschirmcontroller verwendet den Benachrichtigungsservice für In-App-Benachrichtigungen.
+7. **WissensdatenbankController** → **WissensdatenbankService**: Der Wissensdatenbankcontroller interagiert mit dem Wissensdatenbankservice, um Daten aus der Wissensdatenbank zu laden.
+8. **PflanzenProfileController** → **PflanzenProfileService**: Der Pflanzenprofilcontroller verwendet den Pflanzenprofilservice zur Verwaltung von Pflanzenprofilen.
+9. **PflanzenPflegeController** → **PflegeAufgabenService**: Der Pflanzenpflegecontroller interagiert mit dem Pflegeaufgabenservice zur Verwaltung von Pflegeaufgaben.
+10. **EinstellungenController** -> **InfoDialogController**: Der EinstellungenController interagiert mit dem InfoDialogController zur Erzeugung vom Informationsdialog für die Maileinstellungen-Info.
+11. **EinstellungenController** -> **EinstellungenManager**: Der Einstellungscontroller verwendet den Einstellungsmanager, um Benutzereinstellungen zu laden und zu speichern
+12. **NotizenEditorController** → **NotizenService**: Der Notizeneditorcontroller verwendet den Notizenservice zur Verwaltung von Notizen.
+13. **PflanzenProfileController** -> **SlideshowController**: Der PflanzenPflegeController verwendet den SlideshowController um die Bilderslideshow für eine Pflanze zu öffnen
+14. **PflanzenPflegeController** -> **NotizenEditorController**: Der PflanzenPflegeController verwendet den NotizenEditorController um Notizen in der Historie zu verwalten.
+15. **WissensdatenbankController** -> **WissensdatenbankDetailsController**: Der WissensdatenbankController verwendet den WissensdatenbankDetailsController um die Detailansicht der Wissensdatenbank zu öffnen 
+16. **WissensdatenbankController** -> **WissensdatenbankKachelController**: Der WissensdatenbankController verwendet den WissensdatenbankKachelController um die Einträge in der DB zu laden und im GriPane der Wissensdatenbank anzuzeigen 
+17. **PflanzenProfileController** -> **BestaetigungsDialogController**: Der Pflanzenprofilcontroller verwendet der BestaetigungsDialogController um den Bestätigungsdialog beim Löschen eines Pflanzenprofils anzuzeigen
+18. **PflanzenPflegeController** -> **FilterService**: Der PflanzenPflegeController verwendet den FilterService um die Aufgaben in der Pflanzenpflege zu filtern. 
+19. **PflanzenProfileController** -> **ImageService**: Der PflanzenProfileController verwendet den ImageService um Bilder hochzuladen.
+/'

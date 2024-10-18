@@ -1,0 +1,71 @@
+'Klassendiagramm Datenbank- und Modell-Schicht
+@startuml
+skinparam defaultFontName Courier
+skinparam linetype ortho
+left to right direction
+package database {
+class CareTaskHistoryRepository {
+  +saveCareTaskHistory()
+  +getCareTaskHistory()
+}
+class CareTaskRepository {
+  +saveCareTask()
+  +getCareTasks()
+}
+class PhotoLogRepository {
+  +savePhoto()
+  +getPhotosForPlant()
+}
+class PlantProfileRepository {
+  +savePlantProfile()
+  +getPlantProfiles()
+  +deletePlantProfile()
+}
+class SQLiteDB {
+  +connect()
+  +executeQuery()
+  +closeConnection()
+}
+class SettingsRepository {
+  +loadSettings()
+  +saveSettings()
+}
+}
+
+package model {
+class Einstellungen_Model {}
+class PflanzenPflege_Model {}
+class PflanzenPflegeHistory_Model {}
+class PflanzenProfile_Model {}
+class PhotoLog_Model {}
+}
+
+CareTaskHistoryRepository -[#Red]--> SQLiteDB : #1
+CareTaskRepository -[#Green]--> SQLiteDB : #2
+PhotoLogRepository -[#Tomato]--> SQLiteDB : #3
+PlantProfileRepository -[#Brown]--> SQLiteDB : #4
+SettingsRepository -[#Violet]--> SQLiteDB : #5
+
+CareTaskHistoryRepository -[#MidnightBlue]--> PflanzenPflegeHistory_Model : #6
+CareTaskRepository -[#Purple]--> PflanzenPflege_Model : #7
+PhotoLogRepository -[#SeaGreen]--> PhotoLog_Model : #8
+PlantProfileRepository -[#Teal]--> PflanzenProfile_Model : #9
+SettingsRepository -[#Green]--> Einstellungen_Model : #10
+
+@enduml
+
+/'Legende
+1. CareTaskHistoryRepository --> SQLiteDB: Interagiert mit der SQLite-Datenbank, um Daten zu Schreiben oder zu Lesen
+2. CareTaskRepository --> SQLiteDB: Interagiert mit der SQLite-Datenbank, um Daten zu Schreiben oder zu Lesen
+3. PhotoLogRepository --> SQLiteDB: Interagiert mit der SQLite-Datenbank, um Daten zu Schreiben oder zu Lesen
+4. PlantProfileRepository --> SQLiteDB: Interagiert mit der SQLite-Datenbank, um Daten zu Schreiben oder zu Lesen
+5. SettingsRepository --> SQLiteDB: Interagiert mit der SQLite-Datenbank, um Daten zu Schreiben oder zu Lesen
+6. CareTaskHistoryRepository --> PflanzenPflegeHistory_Model: Interagiert mit PflanzenPflegeHistory_Model zum Lesen von Historieneinträgen
+7. CareTaskRepository --> PflanzenPflege_Model: Interagiert mit PflanzenPflege_Model zum Lesen und Filtern von Pflegeaufgaben
+8. PhotoLogRepository --> PhotoLog_Model: Interagiert mit PhotoLog_Model zum Lesen der Bildpfades aus der DB
+9. PlantProfileRepository --> PflanzenProfile_Model: Interagiert mit PflanzenProfile_Model zum Lesen der Pflanzenprofilen
+10. SettingsRepository --> Einstellungen_Model: Interagiert mit Einstellungen_Model zum Lesen und Aktualisieren von Einstellungsdaten
+/'
+
+
+

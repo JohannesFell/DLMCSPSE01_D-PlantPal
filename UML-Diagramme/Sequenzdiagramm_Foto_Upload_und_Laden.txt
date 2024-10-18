@@ -1,0 +1,26 @@
+@startuml
+
+' UML Sequenzdiagramm für den Foto-Upload und das Laden von Bildern in der Slideshow
+
+actor Benutzer
+participant "PflanzenProfileController" as PPC
+participant "ImageService" as IS
+participant "PhotoLogRepository" as PLR
+participant "SlideshowController" as SC
+
+== Foto-Upload ==
+
+Benutzer -> PPC: Fügt ein Foto zum Pflanzenprofil hinzu
+PPC -> IS: Foto hochladen anfordern
+IS -> PLR: Speichert das Foto lokal und \nspeichert die Foto-Informationen (z.B. Dateipfad) in der Datenbank
+IS -> PPC: Rückgabe der Erfolgsmeldung
+PPC -> Benutzer: Erfolgsmeldung anzeigen
+
+== Foto anzeigen in der Slideshow ==
+
+Benutzer -> SC: Öffnet die Slideshow
+SC -> PLR: Lädt alle Fotos für das Pflanzenprofil
+PLR -> SC: Gibt die Fotos zurück
+SC -> Benutzer: Zeigt die Fotos in der Slideshow an
+
+@enduml

@@ -1,0 +1,158 @@
+'Klassendiagramm Gesamte Anwendung
+@startuml
+skinparam defaultFontName Courier
+skinparam linetype ortho
+left to right direction
+package app {
+class BenachrichtigungsController {}
+class BestaetigungsDialogController {}
+class EinstellungenController {}
+class InfoDialogController {}
+class MainScreenController {}
+class NotizenEditorController {}
+class PflanzenPflegeController {}
+class PflanzenProfileController {}
+class PlantPalApp #LightGreen{}
+class SlideshowController {}
+class WissensdatenbankController {}
+class WissensdatenbankDetailsController {}
+class WissensdatenbankKachelController {}
+}
+
+package database {
+class CareTaskHistoryRepository {}
+class CareTaskRepository {}
+class PhotoLogRepository {}
+class PlantProfileRepository {}
+class SQLiteDB {}
+class SettingsRepository {}
+}
+
+package logic {
+class BenachrichtigungsService {}
+class EinstellungenManager {}
+class EmailService {}
+class FilterService {}
+class NotizenService {}
+class PflanzenProfileService {}
+class PflegeAufgabenService {}
+class WissensdatenbankService {}
+class ImageService {}
+}
+
+package model {
+class Einstellungen_Model {}
+class PflanzenPflegeHistory_Model {}
+class PflanzenPflege_Model {}
+class PflanzenProfile_Model {}
+class PhotoLog_Model {}
+}
+
+package utils {
+class DateUtils {}
+class NotificationUtils {}
+}
+
+BenachrichtigungsController -[#Red]--> BenachrichtigungsService
+BenachrichtigungsController -[#Crimson]--> PflegeAufgabenService
+BenachrichtigungsController -[#Green]--> EmailService
+BenachrichtigungsController -[#Darkorange]--> Einstellungen_Model
+BenachrichtigungsController -[#Navy]--> NotificationUtils
+
+EinstellungenController -[#Chocolate]--> EinstellungenManager
+EinstellungenController -[#Darkorange]--> Einstellungen_Model
+EinstellungenController -[#Red]--> NotificationUtils
+
+MainScreenController -[#ForestGreen]--> PflegeAufgabenService
+MainScreenController -[#DarkBlue]--> EmailService
+MainScreenController -[#FireBrick]--> PflanzenPflege_Model
+MainScreenController -[#Green]--> Einstellungen_Model
+MainScreenController -[#SlateBlue]--> PlantProfileRepository
+MainScreenController -[#MediumOrchid]--> CareTaskHistoryRepository
+MainScreenController -[#Teal]--> CareTaskHistoryRepository
+MainScreenController -[#Maroon]--> BenachrichtigungsService
+MainScreenController -[#Chocolate]--> EinstellungenManager
+MainScreenController -[#Red]--> DateUtils
+
+NotizenEditorController -[#Red]--> NotizenService
+NotizenEditorController -[#Navy]--> PflanzenPflegeHistory_Model
+
+PflanzenPflegeController -[#Red]--> CareTaskHistoryRepository
+PflanzenPflegeController -[#Navy]--> CareTaskRepository
+PflanzenPflegeController -[#Purple]--> PlantProfileRepository
+PflanzenPflegeController -[#SeaGreen]--> FilterService
+PflanzenPflegeController -[#FireBrick]--> PflanzenProfileService
+PflanzenPflegeController -[#DarkBlue]--> PflegeAufgabenService
+PflanzenPflegeController -[#Darkorange]--> PflanzenPflegeHistory_Model
+PflanzenPflegeController -[#Black]--> PflanzenPflege_Model
+PflanzenPflegeController -[#Chocolate]--> DateUtils
+
+PflanzenProfileController -[#Chocolate]--> CareTaskHistoryRepository
+PflanzenProfileController -[#DarkBlue]--> CareTaskRepository
+PflanzenProfileController -[#FireBrick]--> PhotoLogRepository
+PflanzenProfileController -[#Darkorange]--> PlantProfileRepository
+PflanzenProfileController -[#MidnightBlue]--> ImageService
+PflanzenProfileController -[#Navy]--> PflanzenProfileService
+PflanzenProfileController -[#Tomato]--> PflegeAufgabenService
+PflanzenProfileController -[#Violet]--> PflanzenProfile_Model
+PflanzenProfileController -[#Teal]--> DateUtils
+
+PlantPalApp -[#Red]--> SQLiteDB
+PlantPalApp -[#Navy]--> EinstellungenManager
+PlantPalApp -[#Crimson]--> Einstellungen_Model
+PlantPalApp -[Bold,#Green]--> MainScreenController
+
+SlideshowController -[#Black]--> DateUtils
+
+CareTaskHistoryRepository -[#Black]--> PflanzenPflegeHistory_Model
+CareTaskRepository -[#Red]--> PflanzenPflege_Model
+PhotoLogRepository -[#Green]--> PhotoLog_Model
+PlantProfileRepository -[#Navy]--> PflanzenProfile_Model
+SettingsRepository -[#Navy]--> Einstellungen_Model
+
+PflanzenProfileService -[#MidnightBlue]--> PlantProfileRepository
+
+BenachrichtigungsService -[#MidnightBlue]--> CareTaskRepository
+BenachrichtigungsService -[#Red]--> PflanzenPflege_Model
+
+EinstellungenManager -[#Purple]--> SettingsRepository
+EinstellungenManager -[#Teal]--> Einstellungen_Model
+
+FilterService -[#Teal]--> CareTaskHistoryRepository
+FilterService -[#Navy]--> CareTaskRepository
+FilterService -[#Tomato]--> PlantProfileRepository
+FilterService -[#Brown]--> PflanzenPflegeHistory_Model
+FilterService -[#Cyan]--> PflanzenPflege_Model
+
+ImageService -[#Cyan]--> PflanzenProfile_Model
+ImageService -[#Black]--> PhotoLogRepository
+ImageService -[#Violet]--> DateUtils
+
+NotizenService -[#Blue]--> CareTaskHistoryRepository
+NotizenService -[#Violet]--> PflanzenPflegeHistory_Model
+
+PflanzenProfileService -[#Navy]--> CareTaskHistoryRepository
+PflanzenProfileService -[#Purple]--> PlantProfileRepository
+PflanzenProfileService -[#Red]--> SQLiteDB
+PflanzenProfileService -[#MidnightBlue]--> PflanzenProfile_Model
+
+PflegeAufgabenService -[#Purple]--> PflanzenPflege_Model
+PflegeAufgabenService -[#Teal]--> CareTaskRepository
+PflegeAufgabenService -[#SeaGreen]--> PlantProfileRepository
+PflegeAufgabenService -[#Navy]--> PflanzenPflegeHistory_Model
+PflegeAufgabenService -[#Black]--> CareTaskHistoryRepository
+PflegeAufgabenService -[#MidnightBlue]--> PflanzenProfile_Model
+
+ImageService -[#Blue]--> PhotoLogRepository 
+ImageService -[#Brown]--> PflanzenProfile_Model
+ImageService -[#Cyan]--> DateUtils
+
+WissensdatenbankController -[#Sienna]--> WissensdatenbankService
+
+WissensdatenbankDetailsController -[#Black]--> WissensdatenbankService
+
+WissensdatenbankKachelController -[#Teal]--> WissensdatenbankService
+
+WissensdatenbankService -[#Violet]--> PhotoLogRepository
+WissensdatenbankService -[#Black]--> PhotoLog_Model
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+
+' UML Aktivitätsdiagramm für den Pflanzenprofil-Erstellungsprozess
+
+|Benutzer|
+start
+
+:Startet die Anwendung;
+:Wählt die Option, ein neues Pflanzenprofil anzulegen;
+:Benutzereingabe für Pflanzeninformationen \n(bspw. Name, botanischer Name, Standort, \nPflegeanforderungen);
+
+|Controller (PflanzenProfileController)|
+:Validiert die Eingabedaten (z.B. Pflichtfelder);
+if (Daten korrekt?) then (ja)
+  :Speichert das Pflanzenprofil;
+  :Zeigt Erfolgsmeldung an;
+  :Erstellt Pflegeaufgaben automatisch;
+  |Service (PflegeAufgabenService)|
+  :Plant Pflegeaufgaben;
+  |BenachrichtigungsService|
+  :Prüft fällige Aufgaben und \nplant In-App-Benachrichtigungen \nzur Aktualisierung des Badge-Zählers;
+  |Controller (MainScreenController)|
+  :Aktualisiert den BenachrichtigungsBadge (hochzählen);
+else (nein)
+  |Controller (PflanzenProfileController)|
+  :Zeigt Fehlermeldung an;
+  :Erneute Eingabe erforderlich;
+endif
+
+:Ende;
+stop
+
+@enduml

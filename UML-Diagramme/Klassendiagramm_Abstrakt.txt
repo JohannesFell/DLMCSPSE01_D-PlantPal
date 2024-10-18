@@ -1,0 +1,60 @@
+' Abstraktes Klassendiagram der PlantPal Anwendung
+@startuml
+skinparam defaultFontName Courier
+skinparam linetype ortho
+top to bottom direction
+skinparam packageStyle rectangle
+
+package app {
+  class BenachrichtigungsController {}
+  class BestaetigungsDialogController {}
+  class EinstellungenController {}
+  class InfoDialogController {}
+  class MainScreenController {}
+  class NotizenEditorController {}
+  class PflanzenPflegeController {}
+  class PflanzenProfileController {}
+  class PlantPalApp {} 
+  class SlideshowController {}
+  class WissensdatenbankController {}
+  class WissensdatenbankDetailsController {}
+  class WissensdatenbankKachelController{}
+}
+
+package logic {
+  class BenachrichtigungsService {}
+  class PflegeAufgabenService {}
+  class EmailService {}
+  class PflanzenProfileService {}
+  class WissensdatenbankService {}
+  class ImageService {}
+}
+
+package database {
+  class PhotoLogRepository {}
+  class CareTaskRepository {}
+  class CareTaskHistoryRepository {}
+  class PlantProfileRepository {}
+}
+
+package model {
+  class PflanzenPflege_Model {}
+  class PflanzenProfile_Model {}
+  class PhotoLog_Model {}
+}
+
+package utils {
+  class DateUtils {}
+  class NotificationUtils {}
+}
+
+' Beziehungen zwischen den Paketen
+app -[#Red]--> logic : verwendet
+app -[#Teal]--> database : speichert/holt Daten
+logic -[#Navy]--> model : verwendet
+logic -[#Green]--> database : speichert/holt Daten
+database -[#Brown]--> model : nutzt Datenmodelle
+logic -[#Purple]--> utils : Hilfsfunktionen
+app -[#Tomato]--> utils : Hilfsfunktionen
+
+@enduml

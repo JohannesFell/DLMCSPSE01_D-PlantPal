@@ -1,0 +1,133 @@
+'Klassendiagramm Service-Logik
+@startuml
+skinparam defaultFontName Courier
+skinparam linetype ortho
+left to right direction
+package logic {
+class BenachrichtigungsService {
+  +checkAndNotifyUpcomingTasks()
+  +getTasksDueIn()
+}
+class PflegeAufgabenService {
+  +loadCurrentTasks()
+  +loadHistory()
+  +loadHistoryForPlant()
+  +getDistinctTaskTypes()
+  +markTaskAsCompleted()
+  +updateAllCareTasks()
+  +calculateNextDate()
+}
+class EmailService {
+  +sendMail()
+}
+class PflanzenProfileService {
+  +getDistinctPlantNames()
+  +getDistinctLocations()
+  +getAllPlantProfiles()
+  +addPlantProfile()
+  +updatePlantProfile()
+  +deletePlantProfile()
+}
+class WissensdatenbankService {
+  +loadKnowledgeBase()
+}
+class FilterService{
+  +filterTasks()
+  +filterHistory()
+}
+class ImageService{
+  +importImage()
+}
+class NotizenService {
+  +updateNoteInHistory()
+}
+class EinstellungenManager {
+  +loadSettings()
+  +saveSettings()
+}
+}
+
+package database {
+class CareTaskHistoryRepository {
+  +saveCareTaskHistory()
+  +getCareTaskHistory()
+}
+class CareTaskRepository {
+  +saveCareTask()
+  +getCareTasks()
+}
+class PhotoLogRepository {
+  +savePhoto()
+  +getPhotosForPlant()
+}
+class PlantProfileRepository {
+  +savePlantProfile()
+  +getPlantProfiles()
+  +deletePlantProfile()
+}
+class SQLiteDB {
+  +connect()
+  +executeQuery()
+  +closeConnection()
+}
+class SettingsRepository {
+  +loadSettings()
+  +saveSettings()
+}
+}
+
+BenachrichtigungsService -[#Navy]--> CareTaskHistoryRepository : #1
+
+EinstellungenManager -[#Green]--> SettingsRepository : #2
+
+FilterService -[#Brown]--> CareTaskHistoryRepository : #3
+FilterService -[#Violet]--> CareTaskRepository : #4
+FilterService -[#Teal]--> PlantProfileRepository : #5
+
+ImageService -[#MidnightBlue]--> PhotoLogRepository : #6
+
+NotizenService -[#Red]--> CareTaskHistoryRepository : #7
+
+PflanzenProfileService -[#Purple]--> CareTaskHistoryRepository : #8
+PflanzenProfileService -[#Tomato]--> PlantProfileRepository : #9
+PflanzenProfileService -[#Crimson]--> SQLiteDB : #10
+
+PflegeAufgabenService -[#Cyan]--> CareTaskRepository : #11
+PflegeAufgabenService -[#SeaGreen]--> CareTaskHistoryRepository : #12
+PflegeAufgabenService -[#Black]--> PlantProfileRepository : #13
+
+
+@enduml
+
+
+/'Legende der Beziehungen:
+Legend of Relationships:
+
+1. BenachrichtigungsService --> CareTaskHistoryRepository : Holt Historie der Pflegeaufgaben für Benachrichtigungen (Abfrage von Aufgaben, um Benachrichtigungen für bevorstehende Aufgaben zu erstellen).
+
+2. EinstellungenManager --> SettingsRepository : Lädt oder speichert Benutzereinstellungen (Verwaltung der App-Einstellungen wie Benachrichtigungseinstellungen oder Benutzerpräferenzen).
+
+3. FilterService --> CareTaskHistoryRepository : Filtert Aufgabenhistorie (Sucht in der Historie der Pflegeaufgaben nach spezifischen Aufgaben).
+
+4. FilterService --> CareTaskRepository : Filtert aktuelle Pflegeaufgaben (Sucht und filtert Aufgaben, die aktuell für die Pflanzen anstehen).
+
+5. FilterService --> PlantProfileRepository : Filtert Pflanzenprofile (Durchsucht und filtert die Profile der Pflanzen nach bestimmten Kriterien).
+
+6. ImageService --> PhotoLogRepository : Importiert und speichert Fotos der Pflanzen (Lädt Bilder von Pflanzen in die Datenbank und ruft sie ab).
+
+7. NotizenService --> CareTaskHistoryRepository : Aktualisiert Notizen in der Aufgabenhistorie (Fügt Notizen zu den Pflegeaufgaben in der Historie hinzu oder bearbeitet diese).
+
+8. PflanzenProfileService --> CareTaskHistoryRepository : Interagiert mit Aufgabenhistorie (Verknüpft Pflanzenprofile mit ihrer jeweiligen Aufgabenhistorie).
+
+9. PflanzenProfileService --> PlantProfileRepository : Fügt Pflanzprofile hinzu, aktualisiert oder löscht sie (Verwaltet die Daten der Pflanzenprofile in der Datenbank).
+
+10. PflanzenProfileService --> SQLiteDB : Stellt eine Verbindung zur Datenbank her (Kommuniziert direkt mit der SQLite-Datenbank, um Pflanzendaten zu verwalten).
+
+11. PflegeAufgabenService --> CareTaskRepository : Verwalten von Pflegeaufgaben (Speichert neue Pflegeaufgaben oder lädt sie für die Benutzeroberfläche).
+
+12. PflegeAufgabenService --> CareTaskHistoryRepository : Historie der Pflegeaufgaben verwalten (Speichert oder aktualisiert abgeschlossene Pflegeaufgaben in der Aufgabenhistorie).
+
+13. PflegeAufgabenService --> PlantProfileRepository : Verknüpft Aufgaben mit Pflanzenprofilen (Verwaltet die Zuordnung der Pflegeaufgaben zu bestimmten Pflanzenprofilen).
+
+'/
+
