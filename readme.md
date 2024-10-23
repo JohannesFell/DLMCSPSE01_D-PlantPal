@@ -1,9 +1,20 @@
-Das PlantPal-Projekt ist eine Desktop-Anwendung zur Unterstützung bei der Pflanzenpflege. Im Fokus steht die Verwaltung von Pflanzenprofilen, die Informationen wie botanische Namen, Standort und Pflegeanforderungen umfassen. Ergänzt wird dies durch eine Fotodokumentation, um das Pflanzenwachstum zu verfolgen, sowie durch automatische Pflegeerinnerungen und /-benachrichtigungen.
+<H1>Projekt: PlantPal - Flourish together</H1>
 
-Zur Entwicklung wird das Kanban-Vorgehensmodell genutzt, das durch seine Flexibilität und Anpassungsfähigkeit den Entwicklungsprozess effizient steuert. Die technische Umsetzung erfolgt in Java, mit JavaFX für die Benutzeroberfläche und SQLite als Datenbank. E-Mail-Benachrichtigungen werden über die JavaMail API implementiert. 
+PlantPal ist eine Desktop-Anwendung zur Verwaltung von Pflanzenpflegeaufgaben. Sie hilft Ihnen dabei, Ihre Pflanzen gesund zu halten, indem sie Pflegeaufgaben wie Gießen und Düngen organisiert, anstehende Aufgaben übersichtlich darstellt und Benachrichtigungen zur Pflanzenpflege bietet. Benutzer können Profile für jede Pflanze erstellen, die Historie der Pflege verwalten, Fotos ihrer Pflanzen hochladen und auf eine Wissensdatenbank zu häufigen Krankheiten und Schädlingen zugreifen.
 
-Die Softwarearchitektur ist modular aufgebaut, um Wartbarkeit und Erweiterbarkeit zu gewährleisten. Die Module für Steuerung, Geschäftslogik und Datenbank sind klar getrennt und flexibel verbunden, was zukünftige Erweiterungen erleichtert und die Wartung vereinfacht.
+Die Anwendung wurde mit Java und JavaFX entwickelt und verwendet SQLite für die lokale Datenspeicherung. PlantPal wurde in IntelliJ IDEA entwickelt und nutzt weitere Technologien wie Maven für das Dependency Management sowie verschiedene Bibliotheken für Funktionalitäten wie PDF-Export und E-Mail-Benachrichtigungen. Der Fokus lag dabei auf einer benutzerfreundlichen und intuitiven Oberfläche.
 
-Potenzielle Risiken wie technische Herausforderungen und Änderungen der Anforderungen wurden frühzeitig erkannt und durch gründliche Technologieevaluierungen entschärft. Die benutzerfreundliche Oberfläche stellt sicher, dass die Anwendung gut angenommen wird.
+Features im Überblick:
 
-Die PlantPal-App bietet eine umfassende Plattform zur Pflanzenpflege, die durch ihre modulare und flexible Architektur auf zukünftige Erweiterungen vorbereitet ist.
+* Pflegeaufgabenverwaltung mit automatisierten Erinnerungen.
+
+* Anlegen und Verwalten von Pflanzenprofilen inklusive Pflegehistorie.
+
+* Benachrichtigungsfunktion mit In-App-Hinweisen und optionaler E-Mail-Benachrichtigung.
+
+* Wissensdatenbank zu den häufigsten Pflanzenkrankheiten und Schädlingen.
+
+* Foto-Upload-Funktion zur Dokumentation des Pflanzenwachstums.
+
+Für eine detaillierte Beschreibung der Funktionen und Installationsanweisungen besuchen Sie bitte die 
+[Projektdokumentation](dokumente/Projektdokumentation.pdf).
